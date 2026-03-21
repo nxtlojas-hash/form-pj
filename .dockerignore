@@ -1,0 +1,8 @@
+node_modules
+api
+package.json
+vercel.json
+service-worker.js
+Dockerfile
+.dockerignore
+blueprint-*.json

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/claud/Documents/GitHub/NXT/**)",
+      "Read(//c/Users/claud/.claude/**)",
+      "Read(//c/Python314/**)",
+      "Read(//c/Users/claud/AppData/Local/Programs/Python/**)",
+      "Bash(CLOUDSDK_PYTHON=\"C:/Python314/python.exe\" gcloud secrets versions access latest --secret=bling-access-token --project=plataforma-nxt-99c15)",
+      "Bash(CLOUDSDK_PYTHON=\"C:/Python314/python.exe\" gcloud auth list)"
+    ]
+  }
+}

@@ -1,0 +1,4215 @@
+{
+  "flow": [
+    {
+      "id": 1,
+      "mapper": {},
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "metadata": {
+        "restore": {
+          "parameters": {
+            "hook": {
+              "data": {
+                "editable": "true"
+              },
+              "label": "receber venda inventario formulario"
+            }
+          }
+        },
+        "designer": {
+          "x": 0,
+          "y": 0
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "Webhook",
+            "required": true
+          },
+          {
+            "name": "maxResults",
+            "type": "number",
+            "label": "Maximum number of results"
+          }
+        ]
+      },
+      "parameters": {
+        "hook": 1252909,
+        "maxResults": 1
+      }
+    },
+    {
+      "id": 6,
+      "mapper": {
+        "array": "{{1.produtos}}"
+      },
+      "module": "builtin:BasicFeeder",
+      "version": 1,
+      "metadata": {
+        "expect": [
+          {
+            "mode": "edit",
+            "name": "array",
+            "spec": [],
+            "type": "array",
+            "label": "Array"
+          }
+        ],
+        "restore": {
+          "expect": {
+            "array": {
+              "mode": "edit"
+            }
+          }
+        },
+        "designer": {
+          "x": 300,
+          "y": 0
+        }
+      },
+      "parameters": {}
+    },
+    {
+      "id": 22,
+      "mapper": {
+        "row": {
+          "0": "{{1.id}}",
+          "5": "VENDA",
+          "6": "{{1.cliente.nome}}",
+          "7": "{{1.cliente.endereco.rua}}{{1.cliente.endereco.numero}}{{1.cliente.endereco.bairro}}{{1.cliente.endereco.cep}}",
+          "8": "{{1.cliente.endereco.cidade}}",
+          "9": "{{1.cliente.endereco.estado}}",
+          "10": "{{1.cliente.cpf}}",
+          "11": "{{1.cliente.telefone}}",
+          "12": "1",
+          "13": "{{6.modelo}}",
+          "14": "{{6.cor}}",
+          "15": "{{6.capacete}}",
+          "16": "{{6.corCapacete}}",
+          "17": "{{6.chassi}}",
+          "18": "{{6.motor}}",
+          "19": "{{1.total}}",
+          "20": "{{1.loja}}",
+          "21": "{{1.vendedor}}",
+          "22": "{{1.dataVenda}}",
+          "23": "{{1.pagamento.formas}} {{1.pagamento.outros}} ",
+          "24": "{{1.pagamento.valores.pix}}",
+          "25": "{{1.pagamento.valores.pos}}",
+          "26": "{{1.pagamento.valores.dinheiro}}",
+          "27": "{{1.pagamento.valores.debito}}",
+          "28": " {{1.pagamento.valores.credito}}{{1.pagamento.parcelas}}",
+          "29": "{{1.pagamento.valores.outros}}{{1.pagamento.outros}}",
+          "30": "{{1.entrega.tipo}}",
+          "31": "{{1.entrega.origem}}{{1.entrega.localSaida}}",
+          "32": "{{1.pagamento.observacoes}}",
+          "33": "{{1.entrega.prazo}}",
+          "34": "{{1.entrega.localSaida}}"
+        },
+        "select": "list",
+        "selectB": "my",
+        "workbook": "/Backup Emergencial Empresas/NXT Lojas/NXT Março 2026.xlsx",
+        "valueType": "values",
+        "worksheet": "Dados_Whattsapp"
+      },
+      "module": "microsoft-excel:addAWorksheetRow",
+      "version": 2,
+      "metadata": {
+        "expect": [
+          {
+            "name": "select",
+            "type": "select",
+            "label": "Select a method",
+            "required": true,
+            "validate": {
+              "enum": [
+                "map",
+                "list"
+              ]
+            }
+          },
+          {
+            "name": "selectB",
+            "type": "select",
+            "label": "Choose your OneDrive location",
+            "required": true,
+            "validate": {
+              "enum": [
+                "my",
+                "site",
+                "group"
+              ]
+            }
+          },
+          {
+            "name": "workbook",
+            "type": "file",
+            "label": "Workbook",
+            "required": true
+          },
+          {
+            "name": "worksheet",
+            "type": "select",
+            "label": "Worksheet",
+            "required": true
+          },
+          {
+            "name": "valueType",
+            "type": "select",
+            "label": "Type of Values Being Entered",
+            "required": true,
+            "validate": {
+              "enum": [
+                "formulas",
+                "formulasLocal",
+                "values"
+              ]
+            }
+          },
+          {
+            "name": "row",
+            "spec": [
+              {
+                "name": "0",
+                "type": "text",
+                "label": "(A): Id"
+              },
+              {
+                "name": "1",
+                "type": "text",
+                "label": "(undefined): Hora de início"
+              },
+              {
+                "name": "2",
+                "type": "text",
+                "label": "(undefined): Hora de conclusão"
+              },
+              {
+                "name": "3",
+                "type": "text",
+                "label": "(undefined): Email"
+              },
+              {
+                "name": "4",
+                "type": "text",
+                "label": "(undefined): Nome"
+              },
+              {
+                "name": "5",
+                "type": "text",
+                "label": "(undefined): MOTIVO"
+              },
+              {
+                "name": "6",
+                "type": "text",
+                "label": "(undefined): Cliente"
+              },
+              {
+                "name": "7",
+                "type": "text",
+                "label": "(undefined): Endereço completo"
+              },
+              {
+                "name": "8",
+                "type": "text",
+                "label": "(undefined): Cidade"
+              },
+              {
+                "name": "9",
+                "type": "text",
+                "label": "(undefined): Estado"
+              },
+              {
+                "name": "10",
+                "type": "text",
+                "label": "(undefined): CPF / CNPJ: "
+              },
+              {
+                "name": "11",
+                "type": "text",
+                "label": "(undefined): ☎Telefone (DDD + Número)"
+              },
+              {
+                "name": "12",
+                "type": "text",
+                "label": "(undefined): QUANTIDADE"
+              },
+              {
+                "name": "13",
+                "type": "text",
+                "label": "(undefined): Modelo"
+              },
+              {
+                "name": "14",
+                "type": "text",
+                "label": "(undefined): Cor"
+              },
+              {
+                "name": "15",
+                "type": "text",
+                "label": "(undefined): Capacete"
+              },
+              {
+                "name": "16",
+                "type": "text",
+                "label": "(undefined): Qual a cor do capacete?"
+              },
+              {
+                "name": "17",
+                "type": "text",
+                "label": "(undefined): 📌Chassi"
+              },
+              {
+                "name": "18",
+                "type": "text",
+                "label": "(undefined): 📌Número do motor"
+              },
+              {
+                "name": "19",
+                "type": "text",
+                "label": "(undefined):  💲Valor NFE "
+              },
+              {
+                "name": "20",
+                "type": "text",
+                "label": "(undefined): 📍Local da Venda"
+              },
+              {
+                "name": "21",
+                "type": "text",
+                "label": "(undefined): Vendedor"
+              },
+              {
+                "name": "22",
+                "type": "text",
+                "label": "(undefined): Data da Venda"
+              },
+              {
+                "name": "23",
+                "type": "text",
+                "label": "(undefined): Forma de Pagamento"
+              },
+              {
+                "name": "24",
+                "type": "text",
+                "label": "(undefined): Pix"
+              },
+              {
+                "name": "25",
+                "type": "text",
+                "label": "(undefined): Pix Pos"
+              },
+              {
+                "name": "26",
+                "type": "text",
+                "label": "(undefined): Dinheiro"
+              },
+              {
+                "name": "27",
+                "type": "text",
+                "label": "(undefined): Cartão de debito"
+              },
+              {
+                "name": "28",
+                "type": "text",
+                "label": "(undefined): Cartão de Credito"
+              },
+              {
+                "name": "29",
+                "type": "text",
+                "label": "(undefined): Outros"
+              },
+              {
+                "name": "30",
+                "type": "text",
+                "label": "(undefined): O cliente irá:"
+              },
+              {
+                "name": "31",
+                "type": "text",
+                "label": "(undefined): Em caso de entrega, o produto sairá:"
+              },
+              {
+                "name": "32",
+                "type": "text",
+                "label": "(undefined): Observações entrega "
+              },
+              {
+                "name": "33",
+                "type": "text",
+                "label": "(undefined): Prazo Entrega"
+              },
+              {
+                "name": "34",
+                "type": "text",
+                "label": "(undefined): Baixa Estoque"
+              },
+              {
+                "name": "35",
+                "type": "text",
+                "label": "(undefined): Baixa Estoque (Normalizado)"
+              },
+              {
+                "name": "36",
+                "type": "text",
+                "label": "(undefined): Status Baixa"
+              }
+            ],
+            "type": "collection",
+            "label": "Row"
+          }
+        ],
+        "restore": {
+          "expect": {
+            "select": {
+              "label": "Select from the list"
+            },
+            "selectB": {
+              "label": "My Drive"
+            },
+            "valueType": {
+              "mode": "chose",
+              "label": "Values"
+            },
+            "worksheet": {
+              "mode": "chose",
+              "label": "Dados_Whatsapp"
+            }
+          },
+          "parameters": {
+            "__IMTCONN__": {
+              "data": {
+                "scoped": "true",
+                "connection": "azure"
+              },
+              "label": "My Microsoft connection (Carlos Filippi <adm@nxt.eco.br>)"
+            }
+          }
+        },
+        "designer": {
+          "x": 581,
+          "y": -6
+        },
+        "interface": [
+          {
+            "name": "id",
+            "type": "text",
+            "label": "Row ID"
+          },
+          {
+            "name": "row",
+            "spec": [
+              {
+                "name": "a",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(A): Id"
+              },
+              {
+                "name": "b",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(B): Hora de início"
+              },
+              {
+                "name": "c",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(C): Hora de conclusão"
+              },
+              {
+                "name": "d",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(D): Email"
+              },
+              {
+                "name": "e",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(E): Nome"
+              },
+              {
+                "name": "f",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(F): MOTIVO"
+              },
+              {
+                "name": "g",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(G): Cliente"
+              },
+              {
+                "name": "h",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(H): Endereço completo"
+              },
+              {
+                "name": "i",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(I): Cidade"
+              },
+              {
+                "name": "j",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(J): Estado"
+              },
+              {
+                "name": "k",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(K): CPF / CNPJ: "
+              },
+              {
+                "name": "l",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(L): ☎Telefone (DDD + Número)"
+              },
+              {
+                "name": "m",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(M): QUANTIDADE"
+              },
+              {
+                "name": "n",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(N): Modelo"
+              },
+              {
+                "name": "o",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(O): Cor"
+              },
+              {
+                "name": "p",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(P): Capacete"
+              },
+              {
+                "name": "q",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(Q): Qual a cor do capacete?"
+              },
+              {
+                "name": "r",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(R): 📌Chassi"
+              },
+              {
+                "name": "s",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(S): 📌Número do motor"
+              },
+              {
+                "name": "t",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(T):  💲Valor NFE "
+              },
+              {
+                "name": "u",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(U): 📍Local da Venda"
+              },
+              {
+                "name": "v",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(V): Vendedor"
+              },
+              {
+                "name": "w",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(W): Data da Venda"
+              },
+              {
+                "name": "x",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(X): Forma de Pagamento"
+              },
+              {
+                "name": "y",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(Y): Pix"
+              },
+              {
+                "name": "z",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(Z): Pix Pos"
+              },
+              {
+                "name": "aa",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AA): Dinheiro"
+              },
+              {
+                "name": "ab",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AB): Cartão de debito"
+              },
+              {
+                "name": "ac",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AC): Cartão de Credito"
+              },
+              {
+                "name": "ad",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AD): Outros"
+              },
+              {
+                "name": "ae",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AE): O cliente irá:"
+              },
+              {
+                "name": "af",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AF): Em caso de entrega, o produto sairá:"
+              },
+              {
+                "name": "ag",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AG): Observações entrega "
+              },
+              {
+                "name": "ah",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AH): Prazo Entrega"
+              },
+              {
+                "name": "ai",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AI): Baixa Estoque"
+              },
+              {
+                "name": "aj",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AJ): Baixa Estoque (Normalizado)"
+              },
+              {
+                "name": "ak",
+                "spec": [
+                  {
+                    "name": "formula",
+                    "type": "text",
+                    "label": "Formula"
+                  },
+                  {
+                    "name": "formulaLocal",
+                    "type": "text",
+                    "label": "Formula Local"
+                  },
+                  {
+                    "name": "numberFormat",
+                    "type": "text",
+                    "label": "Number Format"
+                  },
+                  {
+                    "name": "text",
+                    "type": "text",
+                    "label": "Text"
+                  },
+                  {
+                    "name": "value",
+                    "type": "text",
+                    "label": "Value"
+                  },
+                  {
+                    "name": "valueType",
+                    "type": "text",
+                    "label": "Value Type"
+                  }
+                ],
+                "type": "collection",
+                "label": "(AK): Status Baixa"
+              }
+            ],
+            "type": "collection",
+            "label": "Row"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "__IMTCONN__",
+            "type": "account:azure",
+            "label": "Connection",
+            "required": true
+          }
+        ]
+      },
+      "parameters": {
+        "__IMTCONN__": 5184651
+      }
+    }
+  ],
+  "name": "receber vendas inventario app",
+  "metadata": {
+    "instant": true,
+    "version": 1,
+    "designer": {
+      "orphans": [
+        [
+          {
+            "id": 21,
+            "mapper": {
+              "row": {
+                "0": "{{1.id}}",
+                "5": "VENDA",
+                "6": "{{1.cliente.nome}}",
+                "7": "{{1.cliente.endereco.rua}}{{1.cliente.endereco.numero}}{{1.cliente.endereco.bairro}}{{1.cliente.endereco.cep}}",
+                "8": "{{1.cliente.endereco.cidade}}",
+                "9": "{{1.cliente.endereco.estado}}",
+                "10": "{{1.cliente.cpf}}",
+                "11": "{{1.cliente.telefone}}",
+                "12": "1",
+                "13": "{{6.modelo}}",
+                "14": "{{6.cor}}",
+                "15": "{{6.capacete}}",
+                "16": "{{6.corCapacete}}",
+                "17": "{{6.chassi}}",
+                "18": "{{6.motor}}",
+                "19": "{{1.total}}",
+                "20": "{{1.loja}}",
+                "21": "{{1.vendedor}}",
+                "22": "{{1.dataVenda}}",
+                "23": "{{1.pagamento.formas}} {{1.pagamento.outros}} ",
+                "24": "{{1.pagamento.valores.pix}}",
+                "25": "{{1.pagamento.valores.pos}}",
+                "26": "{{1.pagamento.valores.dinheiro}}",
+                "27": "{{1.pagamento.valores.debito}}",
+                "28": " {{1.pagamento.valores.credito}}{{1.pagamento.parcelas}}",
+                "29": "{{1.pagamento.valores.outros}}{{1.pagamento.outros}}",
+                "30": "{{1.entrega.tipo}}",
+                "31": "{{1.entrega.origem}}{{1.entrega.localSaida}}",
+                "32": "{{1.pagamento.observacoes}}",
+                "33": "{{1.entrega.prazo}}",
+                "34": "{{1.entrega.localSaida}}"
+              },
+              "select": "list",
+              "selectB": "my",
+              "workbook": "/Backup Emergencial Empresas/NXT Lojas/NXT Fevereiro 2026 .xlsx",
+              "valueType": "values",
+              "worksheet": "Dados_Whattsapp"
+            },
+            "module": "microsoft-excel:addAWorksheetRow",
+            "version": 2,
+            "metadata": {
+              "expect": [
+                {
+                  "name": "select",
+                  "type": "select",
+                  "label": "Select a method",
+                  "required": true,
+                  "validate": {
+                    "enum": [
+                      "map",
+                      "list"
+                    ]
+                  }
+                },
+                {
+                  "name": "selectB",
+                  "type": "select",
+                  "label": "Choose your OneDrive location",
+                  "required": true,
+                  "validate": {
+                    "enum": [
+                      "my",
+                      "site",
+                      "group"
+                    ]
+                  }
+                },
+                {
+                  "name": "workbook",
+                  "type": "file",
+                  "label": "Workbook",
+                  "required": true
+                },
+                {
+                  "name": "worksheet",
+                  "type": "select",
+                  "label": "Worksheet",
+                  "required": true
+                },
+                {
+                  "name": "valueType",
+                  "type": "select",
+                  "label": "Type of Values Being Entered",
+                  "required": true,
+                  "validate": {
+                    "enum": [
+                      "formulas",
+                      "formulasLocal",
+                      "values"
+                    ]
+                  }
+                },
+                {
+                  "name": "row",
+                  "spec": [
+                    {
+                      "name": "0",
+                      "type": "text",
+                      "label": "(A): Id"
+                    },
+                    {
+                      "name": "1",
+                      "type": "text",
+                      "label": "(undefined): Hora de início"
+                    },
+                    {
+                      "name": "2",
+                      "type": "text",
+                      "label": "(undefined): Hora de conclusão"
+                    },
+                    {
+                      "name": "3",
+                      "type": "text",
+                      "label": "(undefined): Email"
+                    },
+                    {
+                      "name": "4",
+                      "type": "text",
+                      "label": "(undefined): Nome"
+                    },
+                    {
+                      "name": "5",
+                      "type": "text",
+                      "label": "(undefined): MOTIVO"
+                    },
+                    {
+                      "name": "6",
+                      "type": "text",
+                      "label": "(undefined): Cliente"
+                    },
+                    {
+                      "name": "7",
+                      "type": "text",
+                      "label": "(undefined): Endereço completo"
+                    },
+                    {
+                      "name": "8",
+                      "type": "text",
+                      "label": "(undefined): Cidade"
+                    },
+                    {
+                      "name": "9",
+                      "type": "text",
+                      "label": "(undefined): Estado"
+                    },
+                    {
+                      "name": "10",
+                      "type": "text",
+                      "label": "(undefined): CPF / CNPJ: "
+                    },
+                    {
+                      "name": "11",
+                      "type": "text",
+                      "label": "(undefined): ☎Telefone (DDD + Número)"
+                    },
+                    {
+                      "name": "12",
+                      "type": "text",
+                      "label": "(undefined): QUANTIDADE"
+                    },
+                    {
+                      "name": "13",
+                      "type": "text",
+                      "label": "(undefined): Modelo"
+                    },
+                    {
+                      "name": "14",
+                      "type": "text",
+                      "label": "(undefined): Cor"
+                    },
+                    {
+                      "name": "15",
+                      "type": "text",
+                      "label": "(undefined): Capacete"
+                    },
+                    {
+                      "name": "16",
+                      "type": "text",
+                      "label": "(undefined): Qual a cor do capacete?"
+                    },
+                    {
+                      "name": "17",
+                      "type": "text",
+                      "label": "(undefined): 📌Chassi"
+                    },
+                    {
+                      "name": "18",
+                      "type": "text",
+                      "label": "(undefined): 📌Número do motor"
+                    },
+                    {
+                      "name": "19",
+                      "type": "text",
+                      "label": "(undefined):  💲Valor NFE "
+                    },
+                    {
+                      "name": "20",
+                      "type": "text",
+                      "label": "(undefined): 📍Local da Venda"
+                    },
+                    {
+                      "name": "21",
+                      "type": "text",
+                      "label": "(undefined): Vendedor"
+                    },
+                    {
+                      "name": "22",
+                      "type": "text",
+                      "label": "(undefined): Data da Venda"
+                    },
+                    {
+                      "name": "23",
+                      "type": "text",
+                      "label": "(undefined): Forma de Pagamento"
+                    },
+                    {
+                      "name": "24",
+                      "type": "text",
+                      "label": "(undefined): Pix"
+                    },
+                    {
+                      "name": "25",
+                      "type": "text",
+                      "label": "(undefined): Pix Pos"
+                    },
+                    {
+                      "name": "26",
+                      "type": "text",
+                      "label": "(undefined): Dinheiro"
+                    },
+                    {
+                      "name": "27",
+                      "type": "text",
+                      "label": "(undefined): Cartão de debito"
+                    },
+                    {
+                      "name": "28",
+                      "type": "text",
+                      "label": "(undefined): Cartão de Credito"
+                    },
+                    {
+                      "name": "29",
+                      "type": "text",
+                      "label": "(undefined): Outros"
+                    },
+                    {
+                      "name": "30",
+                      "type": "text",
+                      "label": "(undefined): O cliente irá:"
+                    },
+                    {
+                      "name": "31",
+                      "type": "text",
+                      "label": "(undefined): Em caso de entrega, o produto sairá:"
+                    },
+                    {
+                      "name": "32",
+                      "type": "text",
+                      "label": "(undefined): Observações entrega "
+                    },
+                    {
+                      "name": "33",
+                      "type": "text",
+                      "label": "(undefined): Prazo Entrega"
+                    },
+                    {
+                      "name": "34",
+                      "type": "text",
+                      "label": "(undefined): Baixa Estoque"
+                    },
+                    {
+                      "name": "35",
+                      "type": "text",
+                      "label": "(undefined): Baixa Estoque (Normalizado)"
+                    },
+                    {
+                      "name": "36",
+                      "type": "text",
+                      "label": "(undefined): Status Baixa"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Row"
+                }
+              ],
+              "restore": {
+                "expect": {
+                  "select": {
+                    "label": "Select from the list"
+                  },
+                  "selectB": {
+                    "label": "My Drive"
+                  },
+                  "valueType": {
+                    "mode": "chose",
+                    "label": "Values"
+                  },
+                  "worksheet": {
+                    "mode": "chose",
+                    "label": "Dados_Whatsapp"
+                  }
+                },
+                "parameters": {
+                  "__IMTCONN__": {
+                    "data": {
+                      "scoped": "true",
+                      "connection": "azure"
+                    },
+                    "label": "My Microsoft connection (Carlos Filippi <adm@nxt.eco.br>)"
+                  }
+                }
+              },
+              "designer": {
+                "x": 63,
+                "y": 318,
+                "messages": [
+                  {
+                    "message": "Referenced module 'Webhooks - Custom webhook' [1] is not accessible.",
+                    "category": "reference",
+                    "severity": "warning"
+                  },
+                  {
+                    "message": "Referenced module 'Flow Control - Iterator' [6] is not accessible.",
+                    "category": "reference",
+                    "severity": "warning"
+                  },
+                  {
+                    "message": "The module is not connected to the data flow.",
+                    "category": "link",
+                    "severity": "warning"
+                  }
+                ]
+              },
+              "interface": [
+                {
+                  "name": "id",
+                  "type": "text",
+                  "label": "Row ID"
+                },
+                {
+                  "name": "row",
+                  "spec": [
+                    {
+                      "name": "a",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(A): Id"
+                    },
+                    {
+                      "name": "b",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(B): Hora de início"
+                    },
+                    {
+                      "name": "c",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(C): Hora de conclusão"
+                    },
+                    {
+                      "name": "d",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(D): Email"
+                    },
+                    {
+                      "name": "e",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(E): Nome"
+                    },
+                    {
+                      "name": "f",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(F): MOTIVO"
+                    },
+                    {
+                      "name": "g",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(G): Cliente"
+                    },
+                    {
+                      "name": "h",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(H): Endereço completo"
+                    },
+                    {
+                      "name": "i",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(I): Cidade"
+                    },
+                    {
+                      "name": "j",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(J): Estado"
+                    },
+                    {
+                      "name": "k",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(K): CPF / CNPJ: "
+                    },
+                    {
+                      "name": "l",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(L): ☎Telefone (DDD + Número)"
+                    },
+                    {
+                      "name": "m",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(M): QUANTIDADE"
+                    },
+                    {
+                      "name": "n",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(N): Modelo"
+                    },
+                    {
+                      "name": "o",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(O): Cor"
+                    },
+                    {
+                      "name": "p",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(P): Capacete"
+                    },
+                    {
+                      "name": "q",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(Q): Qual a cor do capacete?"
+                    },
+                    {
+                      "name": "r",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(R): 📌Chassi"
+                    },
+                    {
+                      "name": "s",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(S): 📌Número do motor"
+                    },
+                    {
+                      "name": "t",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(T):  💲Valor NFE "
+                    },
+                    {
+                      "name": "u",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(U): 📍Local da Venda"
+                    },
+                    {
+                      "name": "v",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(V): Vendedor"
+                    },
+                    {
+                      "name": "w",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(W): Data da Venda"
+                    },
+                    {
+                      "name": "x",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(X): Forma de Pagamento"
+                    },
+                    {
+                      "name": "y",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(Y): Pix"
+                    },
+                    {
+                      "name": "z",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(Z): Pix Pos"
+                    },
+                    {
+                      "name": "aa",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AA): Dinheiro"
+                    },
+                    {
+                      "name": "ab",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AB): Cartão de debito"
+                    },
+                    {
+                      "name": "ac",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AC): Cartão de Credito"
+                    },
+                    {
+                      "name": "ad",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AD): Outros"
+                    },
+                    {
+                      "name": "ae",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AE): O cliente irá:"
+                    },
+                    {
+                      "name": "af",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AF): Em caso de entrega, o produto sairá:"
+                    },
+                    {
+                      "name": "ag",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AG): Observações entrega "
+                    },
+                    {
+                      "name": "ah",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AH): Prazo Entrega"
+                    },
+                    {
+                      "name": "ai",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AI): Baixa Estoque"
+                    },
+                    {
+                      "name": "aj",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AJ): Baixa Estoque (Normalizado)"
+                    },
+                    {
+                      "name": "ak",
+                      "spec": [
+                        {
+                          "name": "formula",
+                          "type": "text",
+                          "label": "Formula"
+                        },
+                        {
+                          "name": "formulaLocal",
+                          "type": "text",
+                          "label": "Formula Local"
+                        },
+                        {
+                          "name": "numberFormat",
+                          "type": "text",
+                          "label": "Number Format"
+                        },
+                        {
+                          "name": "text",
+                          "type": "text",
+                          "label": "Text"
+                        },
+                        {
+                          "name": "value",
+                          "type": "text",
+                          "label": "Value"
+                        },
+                        {
+                          "name": "valueType",
+                          "type": "text",
+                          "label": "Value Type"
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "(AK): Status Baixa"
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Row"
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "__IMTCONN__",
+                  "type": "account:azure",
+                  "label": "Connection",
+                  "required": true
+                }
+              ]
+            },
+            "parameters": {
+              "__IMTCONN__": 5184651
+            }
+          }
+        ]
+      ],
+      "samples": {
+        "1": {
+          "id": "VNDA-1772369495538",
+          "loja": "Sumaré Shopping",
+          "total": 1110,
+          "cliente": {
+            "cpf": "",
+            "cnpj": "",
+            "nome": "CLAUDIA REGINA FILIPPI DE MORAES",
+            "email": "",
+            "endereco": {
+              "cep": "13044-500",
+              "rua": "Rua Antônio Marques Serra",
+              "bairro": "Jardim Antonio Von Zuben",
+              "cidade": "Campinas",
+              "estado": "SP",
+              "numero": "545"
+            },
+            "telefone": "(19) 98726-9826"
+          },
+          "entrega": {
+            "tipo": "retirada",
+            "prazo": "2026-03-01",
+            "origem": "propria_loja",
+            "localSaida": "sumare-shopping"
+          },
+          "produtos": [
+            {
+              "id": 1772369482012,
+              "cor": "Vermelho",
+              "motor": "4224313",
+              "preco": 1110,
+              "chassi": "13533",
+              "modelo": "Zilla",
+              "capacete": "sim",
+              "corCapacete": ""
+            }
+          ],
+          "vendedor": "PATRICIA HELOISA DE MOURA OLIVEIRA LOPES",
+          "dataVenda": "2026-03-01",
+          "pagamento": {
+            "formas": [
+              "crediario"
+            ],
+            "outros": "",
+            "valores": {
+              "crediario": 1110
+            },
+            "parcelas": "1",
+            "observacoes": ""
+          },
+          "valorFrete": 0,
+          "matriculaVendedor": "8888"
+        },
+        "6": {
+          "id": 1772369482012,
+          "cor": "Vermelho",
+          "motor": "4224313",
+          "preco": 1110,
+          "chassi": "13533",
+          "modelo": "Zilla",
+          "capacete": "sim",
+          "corCapacete": "",
+          "__IMTINDEX__": 1,
+          "__IMTLENGTH__": 1
+        },
+        "21": {
+          "id": 450,
+          "row": {
+            "a": {
+              "text": "VNDA-1771112144822",
+              "value": "VNDA-1771112144822",
+              "formula": "VNDA-1771112144822",
+              "valueType": "String",
+              "formulaLocal": "VNDA-1771112144822",
+              "numberFormat": "General"
+            },
+            "b": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "c": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "d": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "e": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "f": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "g": {
+              "text": "Cristiane gutierres tavares",
+              "value": "Cristiane gutierres tavares",
+              "formula": "Cristiane gutierres tavares",
+              "valueType": "String",
+              "formulaLocal": "Cristiane gutierres tavares",
+              "numberFormat": "General"
+            },
+            "h": {
+              "text": "Rua Avanhandava95Vila Gilda09190-410",
+              "value": "Rua Avanhandava95Vila Gilda09190-410",
+              "formula": "Rua Avanhandava95Vila Gilda09190-410",
+              "valueType": "String",
+              "formulaLocal": "Rua Avanhandava95Vila Gilda09190-410",
+              "numberFormat": "General"
+            },
+            "i": {
+              "text": "Santo André",
+              "value": "Santo André",
+              "formula": "Santo André",
+              "valueType": "String",
+              "formulaLocal": "Santo André",
+              "numberFormat": "General"
+            },
+            "j": {
+              "text": "SP",
+              "value": "SP",
+              "formula": "SP",
+              "valueType": "String",
+              "formulaLocal": "SP",
+              "numberFormat": "General"
+            },
+            "k": {
+              "text": "199.198.738-29",
+              "value": "199.198.738-29",
+              "formula": "199.198.738-29",
+              "valueType": "String",
+              "formulaLocal": "199.198.738-29",
+              "numberFormat": "General"
+            },
+            "l": {
+              "text": "(11) 94485-5051",
+              "value": "(11) 94485-5051",
+              "formula": "(11) 94485-5051",
+              "valueType": "String",
+              "formulaLocal": "(11) 94485-5051",
+              "numberFormat": "General"
+            },
+            "m": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "n": {
+              "text": "Vega",
+              "value": "Vega",
+              "formula": "Vega",
+              "valueType": "String",
+              "formulaLocal": "Vega",
+              "numberFormat": "General"
+            },
+            "o": {
+              "text": "Bege",
+              "value": "Bege",
+              "formula": "Bege",
+              "valueType": "String",
+              "formulaLocal": "Bege",
+              "numberFormat": "General"
+            },
+            "p": {
+              "text": "sim",
+              "value": "sim",
+              "formula": "sim",
+              "valueType": "String",
+              "formulaLocal": "sim",
+              "numberFormat": "General"
+            },
+            "q": {
+              "text": "PRETO",
+              "value": "PRETO",
+              "formula": "PRETO",
+              "valueType": "String",
+              "formulaLocal": "PRETO",
+              "numberFormat": "General"
+            },
+            "r": {
+              "text": "LXRBB0GW0S0903033",
+              "value": "LXRBB0GW0S0903033",
+              "formula": "LXRBB0GW0S0903033",
+              "valueType": "String",
+              "formulaLocal": "LXRBB0GW0S0903033",
+              "numberFormat": "General"
+            },
+            "s": {
+              "text": "60V1000WA8Y659811959",
+              "value": "60V1000WA8Y659811959",
+              "formula": "60V1000WA8Y659811959",
+              "valueType": "String",
+              "formulaLocal": "60V1000WA8Y659811959",
+              "numberFormat": "General"
+            },
+            "t": {
+              "text": " R$ 4.490,00 ",
+              "value": 4490,
+              "formula": 4490,
+              "valueType": "Double",
+              "formulaLocal": 4490,
+              "numberFormat": "_-[$R$-pt-BR] * #,##0.00_-;-[$R$-pt-BR] * #,##0.00_-;_-[$R$-pt-BR] * \"-\"??_-;_-@_-"
+            },
+            "u": {
+              "text": "Santo André - ABC",
+              "value": "Santo André - ABC",
+              "formula": "Santo André - ABC",
+              "valueType": "String",
+              "formulaLocal": "Santo André - ABC",
+              "numberFormat": "General"
+            },
+            "v": {
+              "text": "VANESSA DO CARMO SANTOS",
+              "value": "VANESSA DO CARMO SANTOS",
+              "formula": "VANESSA DO CARMO SANTOS",
+              "valueType": "String",
+              "formulaLocal": "VANESSA DO CARMO SANTOS",
+              "numberFormat": "General"
+            },
+            "w": {
+              "text": "14/02/2026",
+              "value": 46067,
+              "formula": 46067,
+              "valueType": "Double",
+              "formulaLocal": 46067,
+              "numberFormat": "m/d/yyyy"
+            },
+            "x": {
+              "text": "credito  ",
+              "value": "credito  ",
+              "formula": "credito  ",
+              "valueType": "String",
+              "formulaLocal": "credito  ",
+              "numberFormat": "General"
+            },
+            "y": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "z": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "aa": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ab": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ac": {
+              "text": "44901",
+              "value": 44901,
+              "formula": 44901,
+              "valueType": "Double",
+              "formulaLocal": 44901,
+              "numberFormat": "General"
+            },
+            "ad": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ae": {
+              "text": "retirada",
+              "value": "retirada",
+              "formula": "retirada",
+              "valueType": "String",
+              "formulaLocal": "retirada",
+              "numberFormat": "General"
+            },
+            "af": {
+              "text": "propria_lojasanto-andre-abc",
+              "value": "propria_lojasanto-andre-abc",
+              "formula": "propria_lojasanto-andre-abc",
+              "valueType": "String",
+              "formulaLocal": "propria_lojasanto-andre-abc",
+              "numberFormat": "General"
+            },
+            "ag": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ah": {
+              "text": "14/02/2026",
+              "value": 46067,
+              "formula": 46067,
+              "valueType": "Double",
+              "formulaLocal": 46067,
+              "numberFormat": "m/d/yyyy"
+            },
+            "ai": {
+              "text": "santo-andre-abc",
+              "value": "santo-andre-abc",
+              "formula": "santo-andre-abc",
+              "valueType": "String",
+              "formulaLocal": "santo-andre-abc",
+              "numberFormat": "General"
+            },
+            "aj": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ak": {
+              "text": "",
+              "value": "",
+              "formula": "=IF(AJ450=\"\",\"\",IF(TRIM(U450)=TRIM(AJ450),\"OK\",\"VERIFICAR - Sai de \"&AJ450))",
+              "valueType": "String",
+              "formulaLocal": "=SE(AJ450=\"\";\"\";SE(ARRUMAR(U450)=ARRUMAR(AJ450);\"OK\";\"VERIFICAR - Sai de \"&AJ450))",
+              "numberFormat": "General"
+            }
+          }
+        },
+        "22": {
+          "id": 3,
+          "row": {
+            "a": {
+              "text": "VNDA-1772369495538",
+              "value": "VNDA-1772369495538",
+              "formula": "VNDA-1772369495538",
+              "valueType": "String",
+              "formulaLocal": "VNDA-1772369495538",
+              "numberFormat": "General"
+            },
+            "b": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "c": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "d": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "e": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "f": {
+              "text": "VENDA",
+              "value": "VENDA",
+              "formula": "VENDA",
+              "valueType": "String",
+              "formulaLocal": "VENDA",
+              "numberFormat": "General"
+            },
+            "g": {
+              "text": "CLAUDIA REGINA FILIPPI DE MORAES",
+              "value": "CLAUDIA REGINA FILIPPI DE MORAES",
+              "formula": "CLAUDIA REGINA FILIPPI DE MORAES",
+              "valueType": "String",
+              "formulaLocal": "CLAUDIA REGINA FILIPPI DE MORAES",
+              "numberFormat": "General"
+            },
+            "h": {
+              "text": "Rua Antônio Marques Serra545Jardim Antonio Von Zuben13044-500",
+              "value": "Rua Antônio Marques Serra545Jardim Antonio Von Zuben13044-500",
+              "formula": "Rua Antônio Marques Serra545Jardim Antonio Von Zuben13044-500",
+              "valueType": "String",
+              "formulaLocal": "Rua Antônio Marques Serra545Jardim Antonio Von Zuben13044-500",
+              "numberFormat": "General"
+            },
+            "i": {
+              "text": "Campinas",
+              "value": "Campinas",
+              "formula": "Campinas",
+              "valueType": "String",
+              "formulaLocal": "Campinas",
+              "numberFormat": "General"
+            },
+            "j": {
+              "text": "SP",
+              "value": "SP",
+              "formula": "SP",
+              "valueType": "String",
+              "formulaLocal": "SP",
+              "numberFormat": "General"
+            },
+            "k": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "l": {
+              "text": "(19) 98726-9826",
+              "value": "(19) 98726-9826",
+              "formula": "(19) 98726-9826",
+              "valueType": "String",
+              "formulaLocal": "(19) 98726-9826",
+              "numberFormat": "General"
+            },
+            "m": {
+              "text": "1",
+              "value": 1,
+              "formula": 1,
+              "valueType": "Double",
+              "formulaLocal": 1,
+              "numberFormat": "General"
+            },
+            "n": {
+              "text": "Zilla",
+              "value": "Zilla",
+              "formula": "Zilla",
+              "valueType": "String",
+              "formulaLocal": "Zilla",
+              "numberFormat": "General"
+            },
+            "o": {
+              "text": "Vermelho",
+              "value": "Vermelho",
+              "formula": "Vermelho",
+              "valueType": "String",
+              "formulaLocal": "Vermelho",
+              "numberFormat": "General"
+            },
+            "p": {
+              "text": "sim",
+              "value": "sim",
+              "formula": "sim",
+              "valueType": "String",
+              "formulaLocal": "sim",
+              "numberFormat": "General"
+            },
+            "q": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "r": {
+              "text": "13533",
+              "value": 13533,
+              "formula": 13533,
+              "valueType": "Double",
+              "formulaLocal": 13533,
+              "numberFormat": "General"
+            },
+            "s": {
+              "text": "4224313",
+              "value": 4224313,
+              "formula": 4224313,
+              "valueType": "Double",
+              "formulaLocal": 4224313,
+              "numberFormat": "General"
+            },
+            "t": {
+              "text": " R$ 1.110,00 ",
+              "value": 1110,
+              "formula": 1110,
+              "valueType": "Double",
+              "formulaLocal": 1110,
+              "numberFormat": "_-[$R$-pt-BR] * #,##0.00_-;-[$R$-pt-BR] * #,##0.00_-;_-[$R$-pt-BR] * \"-\"??_-;_-@_-"
+            },
+            "u": {
+              "text": "Sumaré Shopping",
+              "value": "Sumaré Shopping",
+              "formula": "Sumaré Shopping",
+              "valueType": "String",
+              "formulaLocal": "Sumaré Shopping",
+              "numberFormat": "General"
+            },
+            "v": {
+              "text": "PATRICIA HELOISA DE MOURA OLIVEIRA LOPES",
+              "value": "PATRICIA HELOISA DE MOURA OLIVEIRA LOPES",
+              "formula": "PATRICIA HELOISA DE MOURA OLIVEIRA LOPES",
+              "valueType": "String",
+              "formulaLocal": "PATRICIA HELOISA DE MOURA OLIVEIRA LOPES",
+              "numberFormat": "General"
+            },
+            "w": {
+              "text": "01/03/2026",
+              "value": 46082,
+              "formula": 46082,
+              "valueType": "Double",
+              "formulaLocal": 46082,
+              "numberFormat": "m/d/yyyy"
+            },
+            "x": {
+              "text": "crediario  ",
+              "value": "crediario  ",
+              "formula": "crediario  ",
+              "valueType": "String",
+              "formulaLocal": "crediario  ",
+              "numberFormat": "General"
+            },
+            "y": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "z": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "aa": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ab": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ac": {
+              "text": "1",
+              "value": 1,
+              "formula": 1,
+              "valueType": "Double",
+              "formulaLocal": 1,
+              "numberFormat": "General"
+            },
+            "ad": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ae": {
+              "text": "retirada",
+              "value": "retirada",
+              "formula": "retirada",
+              "valueType": "String",
+              "formulaLocal": "retirada",
+              "numberFormat": "General"
+            },
+            "af": {
+              "text": "propria_lojasumare-shopping",
+              "value": "propria_lojasumare-shopping",
+              "formula": "propria_lojasumare-shopping",
+              "valueType": "String",
+              "formulaLocal": "propria_lojasumare-shopping",
+              "numberFormat": "General"
+            },
+            "ag": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ah": {
+              "text": "01/03/2026",
+              "value": 46082,
+              "formula": 46082,
+              "valueType": "Double",
+              "formulaLocal": 46082,
+              "numberFormat": "m/d/yyyy"
+            },
+            "ai": {
+              "text": "sumare-shopping",
+              "value": "sumare-shopping",
+              "formula": "sumare-shopping",
+              "valueType": "String",
+              "formulaLocal": "sumare-shopping",
+              "numberFormat": "General"
+            },
+            "aj": {
+              "text": "",
+              "value": "",
+              "formula": "",
+              "valueType": "Empty",
+              "formulaLocal": "",
+              "numberFormat": "General"
+            },
+            "ak": {
+              "text": "",
+              "value": "",
+              "formula": "=IF(AJ3=\"\",\"\",IF(TRIM(U3)=TRIM(AJ3),\"OK\",\"VERIFICAR - Sai de \"&AJ3))",
+              "valueType": "String",
+              "formulaLocal": "=SE(AJ3=\"\";\"\";SE(ARRUMAR(U3)=ARRUMAR(AJ3);\"OK\";\"VERIFICAR - Sai de \"&AJ3))",
+              "numberFormat": "General"
+            }
+          }
+        }
+      }
+    },
+    "scenario": {
+      "dlq": false,
+      "slots": null,
+      "dataloss": false,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "roundtrips": 1,
+      "sequential": false,
+      "confidential": false,
+      "freshVariables": false,
+      "autoCommitTriggerLast": true
+    }
+  }
+}
