@@ -246,70 +246,91 @@ async function criarPedidoVenda(venda) {
     // 1. Buscar ou criar contato
     const contatoId = await buscarOuCriarContato(venda.empresa);
 
-    // 2. Montar itens do pedido (com fracionamento fiscal se disponivel)
+    // 2. Detectar operacao interestadual (matriz em SC)
+    const estadoCliente = (venda.empresa.endereco?.estado || '').toUpperCase();
+    const isInterestadual = estadoCliente && estadoCliente !== 'SC';
+    const cfopSugerido = isInterestadual ? '6102' : '5102';
+    console.log(`Estado cliente: ${estadoCliente}, Interestadual: ${isInterestadual}, CFOP: ${cfopSugerido}`);
+
+    // 3. Montar itens do pedido — desdobramento fiscal igual ao app
     const itensPedido = [];
     const fiscal = venda.dadosFiscais || {};
 
     for (let i = 0; i < venda.produtos.length; i++) {
         const produto = venda.produtos[i];
-        const precoTotal = (produto.precoUnitario || produto.preco || 0) * (produto.quantidade || 1);
+        const precoUnit = produto.precoUnitario || produto.preco || 0;
         const dadoFiscal = fiscal[produto.modelo];
 
         if (dadoFiscal && dadoFiscal.itens && dadoFiscal.itens.length > 0) {
-            // Fracionamento: dividir produto em componentes fiscais
-            for (let j = 0; j < dadoFiscal.itens.length; j++) {
-                const itemFiscal = dadoFiscal.itens[j];
-                const valorComponente = Math.round(precoTotal * itemFiscal.percentual * 100) / 100;
-                const descBase = itemFiscal.descricao;
-                const desc = itemFiscal.tipo === 'quadro'
-                    ? `${descBase} - ${produto.cor}`
-                    : descBase;
+            // Desdobramento fiscal: 1 moto vira multiplos itens na NF-e
+            console.log(`Desdobramento fiscal para ${produto.modelo}: ${dadoFiscal.itens.length} itens`);
+
+            for (const itemFiscal of dadoFiscal.itens) {
+                const descricao = itemFiscal.tipo === 'quadro'
+                    ? `${itemFiscal.descricao} ${produto.cor}`
+                    : itemFiscal.descricao;
+
+                const valorComponente = Math.round(precoUnit * itemFiscal.percentual * 100) / 100;
 
                 const item = {
-                    descricao: desc,
+                    descricao: descricao,
                     unidade: itemFiscal.unidade || 'UN',
                     quantidade: produto.quantidade || 1,
-                    valor: Math.round(valorComponente / (produto.quantidade || 1) * 100) / 100
+                    valor: valorComponente
                 };
 
                 // Tentar vincular ao produto cadastrado no Bling
                 try {
-                    const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(itemFiscal.descricao.substring(0, 40))}`);
+                    const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(descricao)}`);
                     if (busca.data && busca.data.length > 0) {
                         item.produto = { id: busca.data[0].id };
+                        item.codigo = busca.data[0].codigo || '';
+                        console.log(`Vinculado ao Bling: ${descricao} -> ID ${busca.data[0].id}`);
                     }
                 } catch (e) {
-                    // Produto nao encontrado — envia sem vinculo
+                    console.log(`Produto nao encontrado no Bling: ${descricao}`);
+                }
+
+                if (!item.codigo) {
+                    item.codigo = itemFiscal.tipo === 'quadro'
+                        ? `QUADRO-${i + 1}`
+                        : `${itemFiscal.tipo.toUpperCase()}-${i + 1}`;
                 }
 
                 itensPedido.push(item);
             }
         } else {
-            // Sem dados fiscais: enviar como item unico
+            // Sem desdobramento fiscal: enviar como item unico
             const descricao = `NXT Autopropelido ${produto.modelo} ${produto.cor}`;
             const item = {
                 descricao: descricao,
                 unidade: 'UN',
                 quantidade: produto.quantidade || 1,
-                valor: produto.precoUnitario || produto.preco || 0
+                valor: precoUnit
             };
 
             try {
-                const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(produto.modelo)}`);
+                const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(descricao)}`);
                 if (busca.data && busca.data.length > 0) {
                     item.produto = { id: busca.data[0].id };
+                    item.codigo = busca.data[0].codigo || '';
                 }
             } catch (e) {
-                // Produto nao encontrado — envia sem vinculo
+                console.log(`Produto nao encontrado no Bling: ${descricao}`);
+            }
+
+            if (!item.codigo) {
+                item.codigo = `MOTO-${i + 1}`;
             }
 
             itensPedido.push(item);
         }
     }
 
-    // 3. Frete como item (se houver)
+    // 4. Frete como item (se houver)
     if (venda.frete > 0) {
         itensPedido.push({
+            codigo: 'FRETE',
             descricao: 'Frete',
             unidade: 'UN',
             quantidade: 1,
@@ -317,7 +338,7 @@ async function criarPedidoVenda(venda) {
         });
     }
 
-    // 4. Mapear forma de pagamento
+    // 5. Mapear forma de pagamento
     const mapeamentoPagamento = {
         'dinheiro': 1, 'pix': 17, 'pos': 17, 'debito': 4,
         'credito': 3, 'prazo': 15, 'boleto': 15, 'outros': 99
@@ -325,12 +346,11 @@ async function criarPedidoVenda(venda) {
     const primeiraForma = (venda.pagamento?.formas || [])[0] || 'outros';
     const formaPagamentoId = mapeamentoPagamento[primeiraForma] || 99;
 
-    // 5. Montar parcelas
+    // 6. Montar parcelas
     const parcelas = [];
     const condicaoPrazo = venda.pagamento?.condicaoPrazo || '';
 
     if (primeiraForma === 'prazo' && condicaoPrazo) {
-        // Gerar parcelas baseado na condição
         const diasParcelas = condicaoPrazo === '30 dias' ? [30]
             : condicaoPrazo === '30/60 dias' ? [30, 60]
             : condicaoPrazo === '30/60/90 dias' ? [30, 60, 90]
@@ -354,11 +374,11 @@ async function criarPedidoVenda(venda) {
         });
     }
 
-    // 6. Transporte
+    // 7. Transporte
     const tipoFrete = venda.transporte?.tipo === 'proprio' ? 0
         : venda.transporte?.tipo === 'transportadora' ? 1
         : venda.transporte?.tipo === 'terceirizado' ? 2
-        : 9; // Sem frete
+        : 9;
 
     const transporte = {
         fretePorConta: tipoFrete,
@@ -371,38 +391,43 @@ async function criarPedidoVenda(venda) {
         };
     }
 
-    // 7. Observações
+    // 8. Observacoes — formato identico ao app
     let infoProdutos = '';
-    venda.produtos.forEach((p, i) => {
-        infoProdutos += `\nModelo: ${p.modelo} | Cor: ${p.cor} | Qtd: ${p.quantidade || 1}`;
-        if (i < venda.produtos.length - 1) infoProdutos += '\n---';
+    venda.produtos.forEach((p, index) => {
+        infoProdutos += `\nModelo: ${p.modelo}
+Cor: ${p.cor}
+Qtd: ${p.quantidade || 1}`;
+        if (index < venda.produtos.length - 1) infoProdutos += '\n---';
     });
 
     const anoAtual = new Date().getFullYear();
-    const observacoes = `VENDA PJ — NXT Autopropelidos
-${infoProdutos}
+    const observacoes = `O uso de equipamentos de seguranca e obrigatorio.
+Fabricante NXT${infoProdutos}
 Ano ${anoAtual}
+
+Informacoes de Garantia do Fabricante:
+Quadro: Garantia de 2 (dois) anos contra defeitos de fabricacao, contados a partir da data da nota fiscal.
+Motor: Garantia de 2 (dois) anos contra defeitos de fabricacao, contados a partir da data da nota fiscal.
+Bateria: Garantia de 6 (seis) meses contra defeitos de fabricacao, contados a partir da data da nota fiscal.
+
+Observacao: As garantias acima referem-se exclusivamente a defeitos de fabricacao. Danos causados por uso inadequado, acidentes ou desgaste natural nao estao cobertos.
 
 Empresa: ${venda.empresa.razaoSocial}
 CNPJ: ${venda.empresa.cnpj}
-Responsável Compra: ${venda.empresa.responsavel}
-Responsável Venda: ${venda.responsavelVenda}
+Responsavel Compra: ${venda.empresa.responsavel || ''}
+Vendedor: ${venda.responsavelVenda}
+${venda.empresa.email ? 'E-mail: ' + venda.empresa.email : ''}
 ${venda.numeroPedidoOC ? 'OC: ' + venda.numeroPedidoOC : ''}
-${venda.transporte?.observacoes ? 'Transporte: ' + venda.transporte.observacoes : ''}
-${venda.pagamento?.condicoesComerciais ? 'Condições: ' + venda.pagamento.condicoesComerciais : ''}
-${venda.observacoesGerais ? 'Obs: ' + venda.observacoesGerais : ''}
+${venda.pagamento?.observacoes ? 'Obs: ' + venda.pagamento.observacoes : ''}`.trim();
 
-Garantia do Fabricante:
-Quadro: 2 anos contra defeitos de fabricação.
-Motor: 2 anos contra defeitos de fabricação.
-Bateria: 6 meses contra defeitos de fabricação.`.trim();
-
-    // 8. Montar pedido
+    // 9. Montar pedido — igual ao app
     const pedido = {
         contato: { id: contatoId },
         data: venda.dataVenda,
         numero: venda.id.replace('VNDA-PJ-', ''),
         numeroLoja: venda.id,
+        vendedor: { nome: venda.responsavelVenda },
+        naturezaOperacao: { id: 15105967674 },
         itens: itensPedido,
         parcelas: parcelas,
         transporte: transporte,
