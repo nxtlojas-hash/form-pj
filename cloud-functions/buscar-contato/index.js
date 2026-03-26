@@ -417,31 +417,42 @@ Bateria: 6 meses contra defeitos de fabricação.`.trim();
     let nfeId = null;
     let nfeEnviada = false;
     try {
-        // Tentar endpoint direto de geracao de NF-e a partir do pedido
+        console.log(`[NF-e] Gerando NF-e para pedido ${pedidoId}...`);
+
+        // Tentar gerar NF-e via endpoint de pedido de venda
         let nfeResult;
         try {
-            nfeResult = await blingRequest(`/nfe`, 'POST', {
-                tipo: 1,
-                numero: '',
-                pedidoVenda: { id: pedidoId }
-            });
-        } catch (e1) {
-            // Fallback: endpoint alternativo
             nfeResult = await blingRequest(`/pedidos/vendas/${pedidoId}/gerar-nfe`, 'POST');
+            console.log(`[NF-e] Resultado gerar-nfe:`, JSON.stringify(nfeResult));
+        } catch (e1) {
+            console.error(`[NF-e] Erro endpoint gerar-nfe: ${e1.message}`);
+            // Fallback: criar NF-e diretamente referenciando o pedido
+            try {
+                nfeResult = await blingRequest(`/nfe`, 'POST', {
+                    tipo: 1,
+                    pedidoVenda: { id: pedidoId }
+                });
+                console.log(`[NF-e] Resultado POST /nfe:`, JSON.stringify(nfeResult));
+            } catch (e2) {
+                console.error(`[NF-e] Erro endpoint POST /nfe: ${e2.message}`);
+                throw e2;
+            }
         }
-        nfeId = nfeResult.data?.id || null;
+        nfeId = nfeResult.data?.idNotaFiscal || nfeResult.data?.id || null;
+        console.log(`[NF-e] nfeId: ${nfeId}`);
 
         // 11. Enviar NF-e para SEFAZ
         if (nfeId) {
             try {
                 await blingRequest(`/nfe/${nfeId}/enviar`, 'POST');
                 nfeEnviada = true;
+                console.log(`[NF-e] Enviada para SEFAZ com sucesso`);
             } catch (envioErr) {
-                console.warn('NF-e criada mas nao enviada para SEFAZ:', envioErr.message);
+                console.error(`[NF-e] Criada mas nao enviada para SEFAZ: ${envioErr.message}`);
             }
         }
     } catch (nfeErr) {
-        console.warn('Erro ao gerar NF-e:', nfeErr.message);
+        console.error(`[NF-e] Erro ao gerar NF-e: ${nfeErr.message}`);
     }
 
     return {
