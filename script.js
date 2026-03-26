@@ -4,8 +4,8 @@
 // ============================================================
 
 const WEBHOOK_URL = 'https://hook.us2.make.com/bd6vnalfa7jrem88601pi79zcwqk3rhx';
-const BLING_API_URL = 'https://buscar-contato-bling-yr6pk2gb3a-rj.a.run.app';
-const BLING_VENDA_URL = 'https://registrar-venda-bling-yr6pk2gb3a-rj.a.run.app';
+const BLING_API_URL = 'https://buscar-contato-bling-132604245790.southamerica-east1.run.app';
+const BLING_VENDA_URL = 'https://registrar-venda-bling-132604245790.southamerica-east1.run.app';
 
 // ---- Estado Global ----
 let dadosProdutos = {};
