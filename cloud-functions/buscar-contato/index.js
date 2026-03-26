@@ -279,22 +279,15 @@ async function criarPedidoVenda(venda) {
                     valor: valorComponente
                 };
 
-                // Tentar vincular ao produto cadastrado no Bling
+                // Tentar vincular ao produto cadastrado no Bling (sem codigo para evitar conflito)
                 try {
                     const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(descricao)}`);
                     if (busca.data && busca.data.length > 0) {
                         item.produto = { id: busca.data[0].id };
-                        item.codigo = busca.data[0].codigo || '';
                         console.log(`Vinculado ao Bling: ${descricao} -> ID ${busca.data[0].id}`);
                     }
                 } catch (e) {
-                    console.log(`Produto nao encontrado no Bling: ${descricao}`);
-                }
-
-                if (!item.codigo) {
-                    item.codigo = itemFiscal.tipo === 'quadro'
-                        ? `QUADRO-${i + 1}`
-                        : `${itemFiscal.tipo.toUpperCase()}-${i + 1}`;
+                    // Produto nao encontrado — envia sem vinculo
                 }
 
                 itensPedido.push(item);
@@ -313,14 +306,9 @@ async function criarPedidoVenda(venda) {
                 const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(descricao)}`);
                 if (busca.data && busca.data.length > 0) {
                     item.produto = { id: busca.data[0].id };
-                    item.codigo = busca.data[0].codigo || '';
                 }
             } catch (e) {
-                console.log(`Produto nao encontrado no Bling: ${descricao}`);
-            }
-
-            if (!item.codigo) {
-                item.codigo = `MOTO-${i + 1}`;
+                // Produto nao encontrado — envia sem vinculo
             }
 
             itensPedido.push(item);
