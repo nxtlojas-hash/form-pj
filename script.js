@@ -689,6 +689,27 @@ async function registrarVenda(event) {
         // Mostrar modal de sucesso
         exibirModalSucesso(venda, webhookSucesso);
 
+        // Baixa automática no Sistema de Estoque (fire-and-forget)
+        venda.produtos.forEach(prod => {
+            if (prod.chassi) {
+                fetch('https://estoque-baixa-venda-yr6pk2gb3a-rj.a.run.app', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': 'e4218efd6d48b67425efe89efe602c9321b98c31d5c7c7315c6a579b235cafe4',
+                        'X-App-Name': 'form-pj'
+                    },
+                    body: JSON.stringify({
+                        chassi: prod.chassi,
+                        motor: prod.motor || '',
+                        tipo: 'PJ',
+                        local: venda.loja,
+                        formularioRef: venda.id + '-' + prod.chassi
+                    })
+                }).catch(err => console.error('Baixa estoque erro:', err));
+            }
+        });
+
     } catch (error) {
         console.error('Erro ao registrar venda:', error);
         mostrarFeedback('Erro ao registrar venda: ' + error.message, 'erro');
