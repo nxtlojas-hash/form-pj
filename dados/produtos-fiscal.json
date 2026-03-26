@@ -1,0 +1,359 @@
+{
+  "_info": {
+    "descricao": "Dados fiscais para fracionamento de produtos NXT na NF-e",
+    "atualizacao": "2026-03-26",
+    "ncm_quadro": "87141000",
+    "ncm_motor_500w": "85013110",
+    "ncm_motor_1000w": "85013210",
+    "ncm_bateria": "85072010",
+    "ncm_carregador": "85044010"
+  },
+  "Kay": {
+    "grupo": "bateria6",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT KAY - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 1000W NXT KAY",
+        "ncm": "85013210",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (6 UN) NXT KAY",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Jaya": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT JAYA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT JAYA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (5 UN) NXT JAYA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Juna": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT JUNA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT JUNA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (5 UN) NXT JUNA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Smart-Juna": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT JUNA SMART - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT JUNA SMART",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-13.2AH AGM (5 UN) NXT JUNA SMART",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Gataka": {
+    "grupo": "bateria6",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT GATAKA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 1000W NXT GATAKA",
+        "ncm": "85013210",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (6 UN) NXT GATAKA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Pancho": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT PANCHO - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT PANCHO",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (5 UN) NXT PANCHO",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Vega": {
+    "grupo": "bateria4",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT VEGA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT VEGA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-12AH AGM (4 UN) NXT VEGA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Luna": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT LUNA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT LUNA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (5 UN) NXT LUNA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Hyphen": {
+    "grupo": "bateria6",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT HYPHEN - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 1000W NXT HYPHEN",
+        "ncm": "85013210",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (6 UN) NXT HYPHEN",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Shaka": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT SHAKA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT SHAKA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-12AH AGM (5 UN) NXT SHAKA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Zilla": {
+    "grupo": "bateria4",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT ZILLA - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT ZILLA",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-12AH AGM (4 UN) NXT ZILLA",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  },
+  "Kimbo": {
+    "grupo": "bateria5",
+    "itens": [
+      {
+        "tipo": "quadro",
+        "descricao": "QUADRO/FRAME NXT KIMBO - ARMACAO PARA MOTOCICLETA ELETRICA",
+        "ncm": "87141000",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.45
+      },
+      {
+        "tipo": "motor",
+        "descricao": "MOTOR DE CORRENTE CONTINUA 500W NXT KIMBO",
+        "ncm": "85013110",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.25
+      },
+      {
+        "tipo": "bateria",
+        "descricao": "BATERIA CHUMBO-ACIDO 12V-20AH AGM (5 UN) NXT KIMBO",
+        "ncm": "85072010",
+        "unidade": "UN",
+        "quantidade": 1,
+        "percentual": 0.30
+      }
+    ]
+  }
+}

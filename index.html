@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Build: 2026-03-21-pj-v1 -->
+<!-- NXT Autopropelidos - Form PJ v1.0 | Build: 2026-03-22 -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NXT Lojas - Vendas PJ</title>
+    <title>NXT Autopropelidos - Vendas PJ</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#C6FF00"/>
@@ -14,10 +14,10 @@
     <!-- HEADER -->
     <header class="header">
         <div class="header-content">
-            <img src="logo nxt.png" alt="NXT Lojas Logo" class="header-logo">
+            <img src="logo nxt.png" alt="NXT Autopropelidos Logo" class="header-logo">
             <div class="header-titles">
-                <h1>NXT LOJAS</h1>
-                <span class="header-subtitle">Sistema de Vendas</span>
+                <h1>NXT AUTOPROPELIDOS</h1>
+                <span class="header-subtitle">Sistema de Vendas PJ · v1.0</span>
             </div>
             <div class="header-badge-pj">PESSOA JURÍDICA</div>
         </div>
@@ -65,7 +65,7 @@
                         <div class="step-circle">
                             <span class="step-number">5</span>
                         </div>
-                        <span class="step-label">Entrega</span>
+                        <span class="step-label">Transporte</span>
                     </div>
                 </div>
             </div>
@@ -84,32 +84,11 @@
                     <div class="secao-content">
                         <div class="form-row">
                             <div class="form-group form-group-large">
-                                <label for="lojaVenda">
-                                    Loja
+                                <label for="responsavelVenda">
+                                    Responsável pela Venda
                                     <span class="badge-obrigatorio">obrigatório</span>
                                 </label>
-                                <select id="lojaVenda" required class="select-enhanced">
-                                    <option value="">Selecione a loja...</option>
-                                </select>
-                            </div>
-                            <div class="form-group form-group-small">
-                                <label for="matriculaVendedor">
-                                    Matrícula
-                                    <span class="badge-opcional">opcional</span>
-                                </label>
-                                <input type="text" id="matriculaVendedor" placeholder="0000" maxlength="4" autocomplete="off" inputmode="numeric">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group form-group-large">
-                                <label for="vendedor">
-                                    Vendedor
-                                    <span class="badge-obrigatorio">obrigatório</span>
-                                </label>
-                                <div class="vendedor-container">
-                                    <input type="text" id="vendedor" required placeholder="Digite matrícula ou nome..." autocomplete="off">
-                                    <div id="vendedorSuggestions" class="vendedor-suggestions"></div>
-                                </div>
+                                <input type="text" id="responsavelVenda" required placeholder="Nome do vendedor interno..." autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label for="dataVenda">
@@ -117,6 +96,15 @@
                                     <span class="badge-obrigatorio">obrigatório</span>
                                 </label>
                                 <input type="date" id="dataVenda" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="numeroPedidoOC">
+                                    Número do Pedido de Compra (OC)
+                                    <span class="badge-opcional">opcional</span>
+                                </label>
+                                <input type="text" id="numeroPedidoOC" placeholder="Ex: OC-2026-001..." autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -140,7 +128,11 @@
                                     CNPJ
                                     <span class="badge-obrigatorio">obrigatório</span>
                                 </label>
-                                <input type="text" id="cnpjEmpresa" required placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric">
+                                <div class="input-with-loader">
+                                    <input type="text" id="cnpjEmpresa" required placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric">
+                                    <span class="cep-loader" id="cnpjLoader"></span>
+                                </div>
+                                <span class="bling-status" id="blingStatus"></span>
                             </div>
                             <div class="form-group form-group-large">
                                 <label for="razaoSocial">
@@ -206,9 +198,9 @@
                             <div class="form-group">
                                 <label for="emailEmpresa">
                                     E-mail
-                                    <span class="badge-obrigatorio">obrigatório</span>
+                                    <span class="badge-opcional">opcional</span>
                                 </label>
-                                <input type="email" id="emailEmpresa" required placeholder="empresa@dominio.com.br">
+                                <input type="email" id="emailEmpresa" placeholder="empresa@dominio.com.br">
                             </div>
                         </div>
 
@@ -285,40 +277,23 @@
                                         <option value="">Selecione a cor...</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="precoProduto">Preço</label>
-                                    <input type="text" id="precoProduto" class="currency-input input-preco" placeholder="R$ 0,00">
-                                </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label for="chassiProduto">
-                                        Chassi
-                                        <span class="badge-opcional">opcional</span>
+                                <div class="form-group form-group-small">
+                                    <label for="quantidadeProduto">
+                                        Quantidade
                                     </label>
-                                    <input type="text" id="chassiProduto" placeholder="Digite o chassi...">
+                                    <input type="number" id="quantidadeProduto" min="1" value="1" inputmode="numeric" placeholder="1">
                                 </div>
                                 <div class="form-group">
-                                    <label for="motorProduto">
-                                        Motor
-                                        <span class="badge-opcional">opcional</span>
-                                    </label>
-                                    <input type="text" id="motorProduto" placeholder="Digite o motor...">
+                                    <label for="precoProduto">Preço Unitário</label>
+                                    <input type="text" id="precoProduto" class="currency-input input-preco" placeholder="R$ 0,00">
+                                </div>
+                                <div class="form-group">
+                                    <label>Subtotal</label>
+                                    <div class="subtotal-display" id="subtotalDisplay">R$ 0,00</div>
                                 </div>
                             </div>
-                            <div class="capacete-section">
-                                <div class="capacete-toggle">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="acompanhaCapaceteCheck" onchange="toggleCapaceteVisual()">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                    <span class="toggle-label">Acompanha Capacete</span>
-                                </div>
-                                <div id="corCapaceteContainer" class="capacete-cor-container" style="display: none;">
-                                    <input type="text" id="corCapacete" placeholder="Cor do capacete...">
-                                </div>
-                            </div>
-                            <input type="hidden" id="acompanhaCapacete" value="nao">
                             <button type="button" id="adicionarProdutoBtn" class="btn-adicionar-produto">
                                 + Adicionar Produto à Venda
                             </button>
@@ -380,6 +355,12 @@
                                     <span class="pagamento-nome">Crédito</span>
                                 </div>
                             </label>
+                            <label class="pagamento-card" data-forma="prazo">
+                                <input type="checkbox" name="pagamento" value="prazo">
+                                <div class="pagamento-card-content">
+                                    <span class="pagamento-nome">A Prazo</span>
+                                </div>
+                            </label>
                             <label class="pagamento-card" data-forma="outros">
                                 <input type="checkbox" name="pagamento" value="outros">
                                 <div class="pagamento-card-content">
@@ -411,6 +392,10 @@
                                     <label for="valorCredito">Crédito (R$)</label>
                                     <input type="text" id="valorCredito" class="currency-input valor-forma-pagamento" placeholder="R$ 0,00">
                                 </div>
+                                <div id="prazoValorGroup" class="valor-group" style="display: none;">
+                                    <label for="valorPrazo">A Prazo (R$)</label>
+                                    <input type="text" id="valorPrazo" class="currency-input valor-forma-pagamento" placeholder="R$ 0,00">
+                                </div>
                                 <div id="outrosValorGroup" class="valor-group" style="display: none;">
                                     <label for="valorOutros">Outros (R$)</label>
                                     <input type="text" id="valorOutros" class="currency-input valor-forma-pagamento" placeholder="R$ 0,00">
@@ -435,6 +420,31 @@
                                 <button type="button" class="parcela-btn" data-parcelas="12">12x</button>
                             </div>
                             <input type="hidden" id="parcelasCredito" value="1">
+                        </div>
+
+                        <div id="prazoGroup" class="prazo-section" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="condicaoPagamentoPrazo">
+                                        Condição de Pagamento
+                                        <span class="badge-obrigatorio">obrigatório</span>
+                                    </label>
+                                    <select id="condicaoPagamentoPrazo" class="select-enhanced">
+                                        <option value="">Selecione...</option>
+                                        <option value="30 dias">30 dias</option>
+                                        <option value="30/60 dias">30/60 dias</option>
+                                        <option value="30/60/90 dias">30/60/90 dias</option>
+                                        <option value="sob consulta">Sob consulta</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="observacoesPrazo">
+                                        Observações do Prazo
+                                        <span class="badge-opcional">opcional</span>
+                                    </label>
+                                    <input type="text" id="observacoesPrazo" placeholder="Informações sobre o prazo...">
+                                </div>
+                            </div>
                         </div>
 
                         <div id="outrosPagamentoGroup" style="display: none;">
@@ -476,36 +486,70 @@
                             </label>
                             <textarea id="observacoesPagamento" rows="2" placeholder="Informações adicionais sobre o pagamento..."></textarea>
                         </div>
+
+                        <div class="form-group observacoes-group">
+                            <label for="condicoesComerciais">
+                                Condições Comerciais
+                                <span class="badge-opcional">opcional</span>
+                            </label>
+                            <textarea id="condicoesComerciais" rows="3" placeholder="Descontos especiais, condições negociadas, termos acordados..."></textarea>
+                        </div>
                     </div>
                 </div>
 
-                <!-- SEÇÃO 5: Entrega -->
+                <!-- SEÇÃO 5: Transporte -->
                 <div class="secao-card" data-secao="5">
                     <div class="secao-header" onclick="toggleSecao(this)">
                         <div class="secao-titulo">
                             <span class="secao-num">5</span>
-                            <h4>Entrega</h4>
+                            <h4>Transporte</h4>
                         </div>
                         <span class="secao-toggle-icon">&#9660;</span>
                     </div>
                     <div class="secao-content">
-                        <div class="entrega-tipo-selector">
-                            <label class="entrega-card active" data-tipo="retirada" onclick="selecionarTipoEntrega('retirada')">
-                                <input type="radio" name="tipoEntregaRadio" value="retirada" checked>
+                        <div class="entrega-tipo-selector transporte-selector">
+                            <label class="entrega-card" data-tipo="proprio" onclick="selecionarTipoTransporte('proprio')">
+                                <input type="radio" name="tipoTransporteRadio" value="proprio">
                                 <div class="entrega-card-content">
-                                    <span class="entrega-nome">Retirada na Loja</span>
-                                    <span class="entrega-desc">Cliente retira o produto</span>
+                                    <span class="entrega-nome">Transporte Próprio</span>
+                                    <span class="entrega-desc">Veículo da fábrica</span>
                                 </div>
                             </label>
-                            <label class="entrega-card" data-tipo="domicilio" onclick="selecionarTipoEntrega('domicilio')">
-                                <input type="radio" name="tipoEntregaRadio" value="domicilio">
+                            <label class="entrega-card" data-tipo="transportadora" onclick="selecionarTipoTransporte('transportadora')">
+                                <input type="radio" name="tipoTransporteRadio" value="transportadora">
                                 <div class="entrega-card-content">
-                                    <span class="entrega-nome">Entrega no Endereço</span>
-                                    <span class="entrega-desc">Enviamos até a empresa</span>
+                                    <span class="entrega-nome">Transportadora</span>
+                                    <span class="entrega-desc">Via transportadora contratada</span>
+                                </div>
+                            </label>
+                            <label class="entrega-card" data-tipo="terceirizado" onclick="selecionarTipoTransporte('terceirizado')">
+                                <input type="radio" name="tipoTransporteRadio" value="terceirizado">
+                                <div class="entrega-card-content">
+                                    <span class="entrega-nome">Terceirizado</span>
+                                    <span class="entrega-desc">Serviço de terceiros</span>
                                 </div>
                             </label>
                         </div>
-                        <input type="hidden" id="tipoEntrega" value="retirada">
+                        <input type="hidden" id="tipoTransporte" value="">
+
+                        <div id="transportadoraGroup" class="transportadora-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group form-group-large">
+                                    <label for="nomeTransportadora">
+                                        Nome da Transportadora
+                                        <span class="badge-obrigatorio">obrigatório</span>
+                                    </label>
+                                    <input type="text" id="nomeTransportadora" placeholder="Nome da transportadora...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cnpjTransportadora">
+                                        CNPJ da Transportadora
+                                        <span class="badge-opcional">opcional</span>
+                                    </label>
+                                    <input type="text" id="cnpjTransportadora" placeholder="00.000.000/0000-00" maxlength="18" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="form-row">
                             <div class="form-group">
@@ -515,7 +559,7 @@
                                 </label>
                                 <input type="date" id="prazoEntrega">
                             </div>
-                            <div class="form-group" id="freteGroup">
+                            <div class="form-group">
                                 <label for="valorFrete">
                                     Valor do Frete
                                     <span class="badge-opcional">opcional</span>
@@ -524,20 +568,32 @@
                             </div>
                         </div>
 
-                        <div class="origem-section">
-                            <div class="form-group">
-                                <label for="origemProduto">Origem do Produto</label>
-                                <select id="origemProduto" class="select-enhanced">
-                                    <option value="propria_loja">Da própria Loja</option>
-                                    <option value="outro_lugar">De outro lugar</option>
-                                </select>
-                            </div>
-                            <div id="lojaSaidaGroup" class="loja-saida-group" style="display: none;">
-                                <label for="lojaSaida">Local de Saída</label>
-                                <select id="lojaSaida" class="select-enhanced">
-                                    <option value="">Selecione...</option>
-                                </select>
-                            </div>
+                        <div class="form-group observacoes-group">
+                            <label for="observacoesTransporte">
+                                Observações do Transporte
+                                <span class="badge-opcional">opcional</span>
+                            </label>
+                            <textarea id="observacoesTransporte" rows="2" placeholder="Informações adicionais sobre o transporte..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OBSERVAÇÕES GERAIS -->
+                <div class="secao-card" data-secao="6">
+                    <div class="secao-header" onclick="toggleSecao(this)">
+                        <div class="secao-titulo">
+                            <span class="secao-num">6</span>
+                            <h4>Observações Gerais</h4>
+                        </div>
+                        <span class="secao-toggle-icon">&#9660;</span>
+                    </div>
+                    <div class="secao-content">
+                        <div class="form-group">
+                            <label for="observacoesGerais">
+                                Observações Gerais
+                                <span class="badge-opcional">opcional</span>
+                            </label>
+                            <textarea id="observacoesGerais" rows="4" placeholder="Informações gerais sobre a venda, observações adicionais..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -562,7 +618,7 @@
         </div>
     </main>
 
-    <!-- MODAL DE SUCESSO -->
+    <!-- MODAL DE SUCESSO (mantido para compatibilidade, ocultado pelo wizard) -->
     <div id="modalSucesso" class="modal-overlay" style="display: none;">
         <div class="modal-sucesso-content">
             <div class="sucesso-icon-wrap">
@@ -578,6 +634,151 @@
             <button class="btn-nova-venda" onclick="fecharModalSucesso()">
                 Nova Venda
             </button>
+        </div>
+    </div>
+
+    <!-- WIZARD POS-VENDA -->
+    <div id="wizardPosVenda" class="modal-overlay wizard-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="wizardTitulo">
+        <div class="wizard-container">
+
+            <!-- Cabeçalho do wizard -->
+            <div class="wizard-header">
+                <div class="wizard-header-top">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                        <circle cx="14" cy="14" r="14" fill="#C6FF00" fill-opacity="0.15"/>
+                        <path d="M8 14.5L12.5 19L20 11" stroke="#C6FF00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h3 id="wizardTitulo" class="wizard-titulo">Venda PJ Registrada</h3>
+                </div>
+                <!-- Barra de progresso do wizard -->
+                <div class="wizard-progress" role="tablist" aria-label="Etapas do pós-venda">
+                    <div class="wizard-step active" id="wStep1" role="tab" aria-selected="true" aria-controls="wPane1">
+                        <div class="wizard-step-circle">1</div>
+                        <span class="wizard-step-label">Status</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step" id="wStep2" role="tab" aria-selected="false" aria-controls="wPane2">
+                        <div class="wizard-step-circle">2</div>
+                        <span class="wizard-step-label">WhatsApp</span>
+                    </div>
+                    <div class="wizard-progress-line"></div>
+                    <div class="wizard-step" id="wStep3" role="tab" aria-selected="false" aria-controls="wPane3">
+                        <div class="wizard-step-circle">3</div>
+                        <span class="wizard-step-label">Finalizar</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 1: Status & Resumo -->
+            <div id="wPane1" class="wizard-pane active" role="tabpanel" aria-labelledby="wStep1">
+                <h4 class="wizard-pane-titulo">Status dos Envios</h4>
+
+                <div class="wizard-checklist" id="wizardChecklist">
+                    <!-- preenchido via JS -->
+                </div>
+
+                <div class="wizard-resumo-section">
+                    <div class="wizard-resumo-header">
+                        <span class="wizard-resumo-label">Resumo da Venda</span>
+                        <button type="button" class="btn-wizard-copy" id="btnCopiarResumo" onclick="copiarResumoVenda()" aria-label="Copiar texto do resumo">
+                            Copiar Resumo
+                        </button>
+                    </div>
+                    <textarea
+                        id="wizardResumoTexto"
+                        class="wizard-resumo-textarea"
+                        rows="10"
+                        readonly
+                        onclick="this.select()"
+                        aria-label="Texto do resumo da venda"
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+
+                <div class="wizard-actions">
+                    <button type="button" class="btn-wizard-primary" onclick="wizardAvancar()" aria-label="Avançar para etapa 2">
+                        Avançar
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PASSO 2: Enviar NF-e por WhatsApp -->
+            <div id="wPane2" class="wizard-pane" role="tabpanel" aria-labelledby="wStep2">
+                <h4 class="wizard-pane-titulo">Enviar NF-e por WhatsApp</h4>
+
+                <div id="wPane2Conteudo">
+                    <!-- preenchido via JS -->
+                </div>
+
+                <div class="wizard-actions wizard-actions-duo">
+                    <button type="button" class="btn-wizard-secondary" onclick="wizardVoltar()" aria-label="Voltar para etapa 1">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Voltar
+                    </button>
+                    <button type="button" class="btn-wizard-primary" onclick="wizardAvancar()" aria-label="Avançar para etapa 3">
+                        Avançar
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PASSO 3: Finalizar -->
+            <div id="wPane3" class="wizard-pane" role="tabpanel" aria-labelledby="wStep3">
+                <h4 class="wizard-pane-titulo">Venda Concluída</h4>
+
+                <div class="wizard-finalizar-icon" aria-hidden="true">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="32" fill="#C6FF00" fill-opacity="0.1"/>
+                        <circle cx="32" cy="32" r="24" fill="#C6FF00" fill-opacity="0.18"/>
+                        <path d="M20 32.5L28.5 41L44 25" stroke="#C6FF00" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <p class="wizard-finalizar-msg">Todos os passos foram concluídos. A venda foi registrada com sucesso.</p>
+
+                <div class="wizard-checklist" id="wizardChecklistFinal">
+                    <!-- preenchido via JS -->
+                </div>
+
+                <div class="wizard-actions">
+                    <button type="button" class="btn-wizard-primary btn-wizard-nova-venda" onclick="fecharWizardPosVenda()" aria-label="Fechar wizard e iniciar nova venda">
+                        Nova Venda
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL FATURA PJ -->
+    <div id="modalFatura" class="modal-overlay fatura-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="faturaModalTitulo">
+        <div class="fatura-modal-container">
+
+            <!-- Barra de ações (chrome escuro) -->
+            <div class="fatura-action-bar">
+                <span id="faturaModalTitulo" class="fatura-action-title">Fatura de Venda PJ</span>
+                <div class="fatura-action-buttons">
+                    <button type="button" class="btn-fatura-wpp" onclick="enviarFaturaWhatsApp()" aria-label="Enviar fatura por WhatsApp">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Enviar por WhatsApp
+                    </button>
+                    <button type="button" class="btn-fatura-copiar" onclick="copiarFaturaPJ()" aria-label="Copiar texto da fatura">
+                        Copiar Texto
+                    </button>
+                    <button type="button" class="btn-fatura-fechar" onclick="fecharModalFatura()" aria-label="Fechar fatura">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área de conteúdo da fatura (fundo branco) -->
+            <div class="fatura-scroll-area">
+                <div id="faturaContent" class="fatura-document">
+                    <!-- preenchido via JS -->
+                </div>
+            </div>
+
         </div>
     </div>
 
