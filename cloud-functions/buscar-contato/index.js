@@ -277,14 +277,9 @@ async function criarPedidoVenda(venda) {
                     const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(itemFiscal.descricao.substring(0, 40))}`);
                     if (busca.data && busca.data.length > 0) {
                         item.produto = { id: busca.data[0].id };
-                        item.codigo = busca.data[0].codigo || '';
                     }
                 } catch (e) {
-                    console.log(`Produto nao encontrado no Bling: ${desc}`);
-                }
-
-                if (!item.codigo) {
-                    item.codigo = `PJ-${i + 1}-${itemFiscal.tipo}`;
+                    // Produto nao encontrado — envia sem vinculo
                 }
 
                 itensPedido.push(item);
@@ -303,14 +298,9 @@ async function criarPedidoVenda(venda) {
                 const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(produto.modelo)}`);
                 if (busca.data && busca.data.length > 0) {
                     item.produto = { id: busca.data[0].id };
-                    item.codigo = busca.data[0].codigo || '';
                 }
             } catch (e) {
-                console.log(`Produto nao encontrado no Bling: ${descricao}`);
-            }
-
-            if (!item.codigo) {
-                item.codigo = `PJ-${i + 1}`;
+                // Produto nao encontrado — envia sem vinculo
             }
 
             itensPedido.push(item);
@@ -320,7 +310,6 @@ async function criarPedidoVenda(venda) {
     // 3. Frete como item (se houver)
     if (venda.frete > 0) {
         itensPedido.push({
-            codigo: 'FRETE',
             descricao: 'Frete',
             unidade: 'UN',
             quantidade: 1,
@@ -428,7 +417,18 @@ Bateria: 6 meses contra defeitos de fabricação.`.trim();
     let nfeId = null;
     let nfeEnviada = false;
     try {
-        const nfeResult = await blingRequest(`/pedidos/vendas/${pedidoId}/gerar-nfe`, 'POST');
+        // Tentar endpoint direto de geracao de NF-e a partir do pedido
+        let nfeResult;
+        try {
+            nfeResult = await blingRequest(`/nfe`, 'POST', {
+                tipo: 1,
+                numero: '',
+                pedidoVenda: { id: pedidoId }
+            });
+        } catch (e1) {
+            // Fallback: endpoint alternativo
+            nfeResult = await blingRequest(`/pedidos/vendas/${pedidoId}/gerar-nfe`, 'POST');
+        }
         nfeId = nfeResult.data?.id || null;
 
         // 11. Enviar NF-e para SEFAZ
@@ -437,7 +437,7 @@ Bateria: 6 meses contra defeitos de fabricação.`.trim();
                 await blingRequest(`/nfe/${nfeId}/enviar`, 'POST');
                 nfeEnviada = true;
             } catch (envioErr) {
-                console.warn('NF-e criada mas não enviada para SEFAZ:', envioErr.message);
+                console.warn('NF-e criada mas nao enviada para SEFAZ:', envioErr.message);
             }
         }
     } catch (nfeErr) {
