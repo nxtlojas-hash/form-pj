@@ -1092,6 +1092,70 @@ function gerarTextoResumoVendaPJ(venda, blingSucesso, blingPedidoId, nfeId, nfeE
 }
 
 // ============================================================
+// ORDEM DE SEPARACAO PJ - GERADOR DE TEXTO (sem valores)
+// ============================================================
+
+function gerarTextoSeparacaoPJ(venda, blingPedidoId) {
+    const dataFormatada = new Date(venda.dataVenda + 'T12:00:00').toLocaleDateString('pt-BR');
+    const e = venda.empresa;
+    const end = e.endereco || {};
+    const t = venda.transporte || {};
+
+    let texto = '';
+    texto += `*ORDEM DE SEPARACAO PJ*\n`;
+    texto += `NXT Autopropelidos\n\n`;
+
+    const pedidoLinha = [];
+    if (venda.numeroPedidoOC) pedidoLinha.push(`OC #${venda.numeroPedidoOC}`);
+    if (blingPedidoId) pedidoLinha.push(`Bling #${blingPedidoId}`);
+    if (pedidoLinha.length) texto += `*Pedido:* ${pedidoLinha.join(' / ')}\n`;
+
+    texto += `*Data:* ${dataFormatada}\n`;
+    if (venda.responsavelVenda) texto += `*Vendedor:* ${venda.responsavelVenda}\n`;
+    texto += `\n`;
+
+    texto += `*CLIENTE*\n`;
+    texto += `${e.razaoSocial}\n`;
+    texto += `CNPJ: ${e.cnpj}\n`;
+    if (e.responsavel) {
+        const tel = e.telefone ? ` - ${e.telefone}` : '';
+        texto += `Resp: ${e.responsavel}${tel}\n`;
+    }
+    texto += `\n`;
+
+    texto += `*ENDERECO DE ENTREGA*\n`;
+    const linha1 = [end.rua, end.numero].filter(Boolean).join(', ');
+    if (linha1) texto += `${linha1}`;
+    if (end.bairro) texto += ` - ${end.bairro}`;
+    texto += `\n`;
+    const cidadeUf = [end.cidade, end.estado].filter(Boolean).join('/');
+    if (cidadeUf) texto += `${cidadeUf}`;
+    if (end.cep) texto += ` - CEP ${end.cep}`;
+    texto += `\n\n`;
+
+    texto += `*PRODUTOS A SEPARAR*\n`;
+    venda.produtos.forEach(p => {
+        const modelo = (p.modelo || '').toUpperCase();
+        const cor = (p.cor || '').toUpperCase();
+        texto += `[ ] *${p.quantidade}x* ${modelo} - ${cor}\n`;
+    });
+    texto += `\n`;
+
+    texto += `*TRANSPORTE*\n`;
+    const tiposTransporte = { proprio: 'Transporte Proprio', transportadora: 'Transportadora', terceirizado: 'Terceirizado' };
+    const tipoNome = tiposTransporte[t.tipo] || t.tipo || '';
+    const transpLinha = [tipoNome, t.nomeTransportadora].filter(Boolean).join(' / ');
+    if (transpLinha) texto += `${transpLinha}\n`;
+    if (t.dataPrevista) {
+        const dp = new Date(t.dataPrevista + 'T12:00:00').toLocaleDateString('pt-BR');
+        texto += `Previsao: ${dp}\n`;
+    }
+    if (t.observacoes) texto += `Obs: ${t.observacoes}\n`;
+
+    return texto;
+}
+
+// ============================================================
 // WHATSAPP NF-e
 // ============================================================
 
