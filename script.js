@@ -840,7 +840,7 @@ function fecharWizardPosVenda() {
 }
 
 function wizardAvancar() {
-    if (wizardPassoAtual < 3) {
+    if (wizardPassoAtual < 4) {
         _wizardIrParaPasso(wizardPassoAtual + 1);
     }
 }
