@@ -1245,6 +1245,57 @@ function gerarHTMLOrdemSeparacao(venda, blingPedidoId) {
     return container;
 }
 
+async function copiarOrdemSeparacao() {
+    const textarea = document.getElementById('ordemSeparacaoTexto');
+    const btn = document.getElementById('btnCopiarSeparacao');
+    if (!textarea || !btn) return;
+
+    const texto = textarea.value;
+
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(texto);
+        } else {
+            textarea.select();
+            document.execCommand('copy');
+        }
+
+        const textoOriginal = btn.textContent;
+        btn.textContent = 'Copiado!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = textoOriginal;
+            btn.classList.remove('copied');
+        }, 2000);
+    } catch {
+        mostrarFeedback('Erro ao copiar. Selecione o texto manualmente.', 'erro');
+    }
+}
+
+function enviarSeparacaoGrupo() {
+    const textarea = document.getElementById('ordemSeparacaoTexto');
+    if (!textarea || !textarea.value) {
+        mostrarFeedback('Texto da ordem nao disponivel.', 'erro');
+        return;
+    }
+    const url = `https://wa.me/?text=${encodeURIComponent(textarea.value)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    mostrarFeedback('WhatsApp aberto. Escolha o grupo de expedicao.', 'sucesso');
+}
+
+function imprimirOrdemSeparacao() {
+    if (!ultimaVendaRegistrada) {
+        mostrarFeedback('Nenhuma venda registrada.', 'erro');
+        return;
+    }
+    // Renderiza HTML antes de imprimir (garante conteudo atualizado)
+    gerarHTMLOrdemSeparacao(ultimaVendaRegistrada, ultimoResultadoBling && ultimoResultadoBling.blingPedidoId);
+    document.body.classList.add('print-ordem-separacao');
+    window.print();
+    // Remove a classe apos o dialog fechar (timeout simples; print eh sincrono em alguns browsers, async em outros)
+    setTimeout(() => document.body.classList.remove('print-ordem-separacao'), 500);
+}
+
 // ============================================================
 // WHATSAPP NF-e
 // ============================================================

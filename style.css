@@ -2416,3 +2416,14 @@ body {
     color: #888;
     margin: 0 0 12px 0;
 }
+
+@media print {
+    body.print-ordem-separacao > *:not(#ordemSeparacaoContent) {
+        display: none !important;
+    }
+    body.print-ordem-separacao #ordemSeparacaoContent {
+        position: static !important;
+        left: 0 !important;
+        display: block !important;
+    }
+}
