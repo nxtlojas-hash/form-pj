@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nxt-lojas-cache-v16';
+const CACHE_NAME = 'nxt-lojas-cache-v17';
 const urlsToCache = [
   '/',
   '/index.html',

@@ -2323,34 +2323,39 @@ body {
    ============================================================ */
 .ordem-separacao-document {
     width: 210mm;
-    min-height: 297mm;
-    padding: 18mm;
+    height: 297mm;
+    padding: 0 18mm 18mm 18mm;
     box-sizing: border-box;
     background: #fff;
     color: #000;
     font-family: 'Helvetica', 'Arial', sans-serif;
-    font-size: 12pt;
-    line-height: 1.4;
+    font-size: 11pt;
+    line-height: 1.35;
+    overflow: hidden;
 }
 
 .ordem-separacao-document .osep-header {
-    border-bottom: 2px solid #000;
-    padding-bottom: 8mm;
-    margin-bottom: 8mm;
+    background: #000;
+    color: #fff;
+    margin: 0 -18mm 6mm -18mm;
+    padding: 5mm 18mm;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 10mm;
+    align-items: center;
+    gap: 8mm;
 }
 .ordem-separacao-document .osep-header h1 {
-    font-size: 22pt;
+    font-size: 15pt;
     margin: 0;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    color: #fff;
 }
 .ordem-separacao-document .osep-header-meta {
     text-align: right;
-    font-size: 11pt;
+    font-size: 9pt;
+    color: #fff;
 }
+.ordem-separacao-document .osep-header-meta strong { color: #C6FF00; }
 
 .ordem-separacao-document .osep-bloco {
     margin-bottom: 6mm;
@@ -2392,8 +2397,8 @@ body {
 .ordem-separacao-document .osep-produtos .col-cor { font-size: 14pt; font-weight: 600; }
 
 .ordem-separacao-document .osep-assinaturas {
-    margin-top: 14mm;
-    padding-top: 6mm;
+    margin-top: 8mm;
+    padding-top: 4mm;
     border-top: 1px dashed #000;
 }
 .ordem-separacao-document .osep-assinatura-linha {
@@ -2455,11 +2460,11 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 6mm;
+    gap: 5mm;
 }
 
 .ordem-separacao-document .osep-logo {
-    height: 18mm;
+    height: 11mm;
     width: auto;
     flex-shrink: 0;
 }

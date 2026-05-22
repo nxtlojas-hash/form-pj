@@ -1352,21 +1352,9 @@ async function gerarPDFSeparacao() {
         const imgWidth = pageWidth;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        if (imgHeight <= pageHeight) {
-            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        } else {
-            // Documento muito longo: dividir em paginas
-            let heightLeft = imgHeight;
-            let position = 0;
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-        }
+        // Documento e desenhado para caber em A4 unica (overflow hidden no CSS).
+        // Limitamos a uma pagina para evitar pagina extra em branco por arredondamento.
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, Math.min(imgHeight, pageHeight));
 
         // Nome do arquivo: OC, senao Bling, senao timestamp
         let id = ultimaVendaRegistrada.numeroPedidoOC || blingPedidoId;
