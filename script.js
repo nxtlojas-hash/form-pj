@@ -1212,6 +1212,7 @@ function gerarHTMLOrdemSeparacao(venda, blingPedidoId) {
                 <div>Data: ${dataFormatada}${venda.responsavelVenda ? ' · Vendedor: ' + venda.responsavelVenda : ''}</div>
             </div>
         </div>
+        <div class="osep-content">
 
         <div class="osep-bloco">
             <div class="osep-bloco-titulo">CLIENTE</div>
@@ -1250,6 +1251,7 @@ function gerarHTMLOrdemSeparacao(venda, blingPedidoId) {
             <br>
             <div class="osep-assinatura-linha">Conferido por: <span class="osep-linha-longa"></span></div>
             <div class="osep-assinatura-linha">Assinatura: <span class="osep-linha-longa"></span></div>
+        </div>
         </div>
     `;
 

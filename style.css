@@ -2324,7 +2324,7 @@ body {
 .ordem-separacao-document {
     width: 210mm;
     height: 297mm;
-    padding: 0 18mm 18mm 18mm;
+    padding: 0;
     box-sizing: border-box;
     background: #fff;
     color: #000;
@@ -2337,12 +2337,13 @@ body {
 .ordem-separacao-document .osep-header {
     background: #000;
     color: #fff;
-    margin: 0 -18mm 6mm -18mm;
     padding: 5mm 18mm;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 8mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 .ordem-separacao-document .osep-header h1 {
     font-size: 15pt;
@@ -2356,6 +2357,10 @@ body {
     color: #fff;
 }
 .ordem-separacao-document .osep-header-meta strong { color: #C6FF00; }
+
+.ordem-separacao-document .osep-content {
+    padding: 6mm 18mm 18mm 18mm;
+}
 
 .ordem-separacao-document .osep-bloco {
     margin-bottom: 6mm;
@@ -2390,6 +2395,8 @@ body {
     background: #f0f0f0;
     font-size: 10pt;
     text-transform: uppercase;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
 }
 .ordem-separacao-document .osep-produtos .col-check { width: 12mm; text-align: center; font-size: 18pt; }
 .ordem-separacao-document .osep-produtos .col-qtd { width: 18mm; font-weight: bold; font-size: 14pt; }
