@@ -1296,6 +1296,85 @@ function imprimirOrdemSeparacao() {
     setTimeout(() => document.body.classList.remove('print-ordem-separacao'), 500);
 }
 
+async function gerarPDFSeparacao() {
+    if (!ultimaVendaRegistrada) {
+        mostrarFeedback('Nenhuma venda registrada.', 'erro');
+        return;
+    }
+    if (!window.html2canvas || !window.jspdf) {
+        mostrarFeedback('Bibliotecas de PDF nao carregadas.', 'erro');
+        return;
+    }
+
+    const btn = document.getElementById('btnPdfSeparacao');
+    const labelOriginal = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Gerando...'; }
+
+    try {
+        const blingPedidoId = ultimoResultadoBling && ultimoResultadoBling.blingPedidoId;
+        const container = gerarHTMLOrdemSeparacao(ultimaVendaRegistrada, blingPedidoId);
+        if (!container) {
+            mostrarFeedback('Container do PDF nao encontrado.', 'erro');
+            return;
+        }
+
+        // Tornar visivel para html2canvas conseguir capturar (mantem off-screen)
+        const leftAnterior = container.style.left;
+        container.style.left = '0';
+        container.style.top = '0';
+        container.style.zIndex = '-1';
+
+        // Aguarda render
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        const canvas = await window.html2canvas(container, { scale: 2, backgroundColor: '#ffffff' });
+        const imgData = canvas.toDataURL('image/png');
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageWidth = 210;
+        const pageHeight = 297;
+        const imgWidth = pageWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        if (imgHeight <= pageHeight) {
+            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        } else {
+            // Documento muito longo: dividir em paginas
+            let heightLeft = imgHeight;
+            let position = 0;
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+        }
+
+        // Nome do arquivo: OC, senao Bling, senao timestamp
+        let id = ultimaVendaRegistrada.numeroPedidoOC || blingPedidoId;
+        if (!id) {
+            const d = new Date();
+            id = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
+        }
+        pdf.save(`ordem-separacao-${id}.pdf`);
+
+        // Restaurar posicao off-screen
+        container.style.left = leftAnterior || '-10000px';
+        container.style.top = '0';
+        container.style.zIndex = '';
+
+        mostrarFeedback('PDF gerado.', 'sucesso');
+    } catch (err) {
+        console.error('Erro ao gerar PDF:', err);
+        mostrarFeedback('Erro ao gerar PDF.', 'erro');
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = labelOriginal; }
+    }
+}
+
 // ============================================================
 // WHATSAPP NF-e
 // ============================================================
