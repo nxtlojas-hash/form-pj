@@ -2304,3 +2304,115 @@ body {
         padding: 0.75rem 1.1rem;
     }
 }
+
+/* ============================================================
+   ORDEM DE SEPARACAO - documento impressao/PDF
+   ============================================================ */
+.ordem-separacao-document {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 18mm;
+    box-sizing: border-box;
+    background: #fff;
+    color: #000;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 12pt;
+    line-height: 1.4;
+}
+
+.ordem-separacao-document .osep-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 8mm;
+    margin-bottom: 8mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10mm;
+}
+.ordem-separacao-document .osep-header h1 {
+    font-size: 22pt;
+    margin: 0;
+    letter-spacing: 1px;
+}
+.ordem-separacao-document .osep-header-meta {
+    text-align: right;
+    font-size: 11pt;
+}
+
+.ordem-separacao-document .osep-bloco {
+    margin-bottom: 6mm;
+}
+.ordem-separacao-document .osep-bloco-titulo {
+    font-weight: bold;
+    font-size: 11pt;
+    text-transform: uppercase;
+    border-bottom: 1px solid #000;
+    margin-bottom: 2mm;
+    padding-bottom: 1mm;
+}
+
+.ordem-separacao-document .osep-bloco-endereco .osep-endereco-linha {
+    font-size: 14pt;
+    font-weight: 600;
+}
+
+.ordem-separacao-document .osep-produtos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2mm;
+}
+.ordem-separacao-document .osep-produtos th,
+.ordem-separacao-document .osep-produtos td {
+    border: 1px solid #000;
+    padding: 3mm 4mm;
+    text-align: left;
+    vertical-align: middle;
+}
+.ordem-separacao-document .osep-produtos thead th {
+    background: #f0f0f0;
+    font-size: 10pt;
+    text-transform: uppercase;
+}
+.ordem-separacao-document .osep-produtos .col-check { width: 12mm; text-align: center; font-size: 18pt; }
+.ordem-separacao-document .osep-produtos .col-qtd { width: 18mm; font-weight: bold; font-size: 14pt; }
+.ordem-separacao-document .osep-produtos .col-modelo { font-size: 14pt; font-weight: 600; }
+.ordem-separacao-document .osep-produtos .col-cor { font-size: 14pt; font-weight: 600; }
+
+.ordem-separacao-document .osep-assinaturas {
+    margin-top: 14mm;
+    padding-top: 6mm;
+    border-top: 1px dashed #000;
+}
+.ordem-separacao-document .osep-assinatura-linha {
+    margin-bottom: 5mm;
+    font-size: 11pt;
+}
+.ordem-separacao-document .osep-linha-longa {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    width: 110mm;
+    margin-left: 4mm;
+}
+.ordem-separacao-document .osep-linha-curta {
+    display: inline-block;
+    border-bottom: 1px solid #000;
+    width: 60mm;
+    margin-left: 4mm;
+}
+
+/* Container do pane 3 - botoes de acao */
+.wizard-acoes-separacao {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0 16px 0;
+}
+@media (max-width: 600px) {
+    .wizard-acoes-separacao { grid-template-columns: 1fr; }
+}
+
+.wizard-pane-descricao {
+    font-size: 0.9em;
+    color: #888;
+    margin: 0 0 12px 0;
+}

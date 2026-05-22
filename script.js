@@ -1155,6 +1155,96 @@ function gerarTextoSeparacaoPJ(venda, blingPedidoId) {
     return texto;
 }
 
+function gerarHTMLOrdemSeparacao(venda, blingPedidoId) {
+    const dataFormatada = new Date(venda.dataVenda + 'T12:00:00').toLocaleDateString('pt-BR');
+    const e = venda.empresa;
+    const end = e.endereco || {};
+    const t = venda.transporte || {};
+
+    const pedidoParts = [];
+    if (venda.numeroPedidoOC) pedidoParts.push(`OC #${venda.numeroPedidoOC}`);
+    if (blingPedidoId) pedidoParts.push(`Bling #${blingPedidoId}`);
+    const pedidoStr = pedidoParts.join(' / ') || '—';
+
+    const enderecoLinha1Parts = [end.rua, end.numero].filter(Boolean).join(', ');
+    const enderecoLinha1 = end.bairro ? `${enderecoLinha1Parts} - ${end.bairro}` : enderecoLinha1Parts;
+    const enderecoLinha2Parts = [];
+    const cidadeUf = [end.cidade, end.estado].filter(Boolean).join('/');
+    if (cidadeUf) enderecoLinha2Parts.push(cidadeUf);
+    if (end.cep) enderecoLinha2Parts.push(`CEP ${end.cep}`);
+    const enderecoLinha2 = enderecoLinha2Parts.join(' - ');
+
+    const tiposTransporte = { proprio: 'Transporte Proprio', transportadora: 'Transportadora', terceirizado: 'Terceirizado' };
+    const tipoNome = tiposTransporte[t.tipo] || t.tipo || '';
+    const transpLinha = [tipoNome, t.nomeTransportadora].filter(Boolean).join(' / ') || '—';
+    const previsao = t.dataPrevista ? new Date(t.dataPrevista + 'T12:00:00').toLocaleDateString('pt-BR') : '';
+
+    const produtosRows = venda.produtos.map(p => `
+        <tr>
+            <td class="col-check">☐</td>
+            <td class="col-qtd">${p.quantidade}x</td>
+            <td class="col-modelo">${(p.modelo || '').toUpperCase()}</td>
+            <td class="col-cor">${(p.cor || '').toUpperCase()}</td>
+        </tr>
+    `).join('');
+
+    const html = `
+        <div class="osep-header">
+            <h1>ORDEM DE SEPARAÇÃO</h1>
+            <div class="osep-header-meta">
+                <div><strong>NXT Autopropelidos</strong></div>
+                <div>Pedido: <strong>${pedidoStr}</strong></div>
+                <div>Data: ${dataFormatada}${venda.responsavelVenda ? ' · Vendedor: ' + venda.responsavelVenda : ''}</div>
+            </div>
+        </div>
+
+        <div class="osep-bloco">
+            <div class="osep-bloco-titulo">CLIENTE</div>
+            <div>${e.razaoSocial}</div>
+            <div>CNPJ: ${e.cnpj}</div>
+            ${e.responsavel ? `<div>Resp: ${e.responsavel}${e.telefone ? ' — ' + e.telefone : ''}</div>` : ''}
+        </div>
+
+        <div class="osep-bloco osep-bloco-endereco">
+            <div class="osep-bloco-titulo">ENDEREÇO DE ENTREGA</div>
+            <div class="osep-endereco-linha">${enderecoLinha1 || '—'}</div>
+            ${enderecoLinha2 ? `<div class="osep-endereco-linha">${enderecoLinha2}</div>` : ''}
+        </div>
+
+        <div class="osep-bloco">
+            <div class="osep-bloco-titulo">PRODUTOS A SEPARAR</div>
+            <table class="osep-produtos">
+                <thead>
+                    <tr><th class="col-check"></th><th class="col-qtd">Qtd</th><th class="col-modelo">Modelo</th><th class="col-cor">Cor</th></tr>
+                </thead>
+                <tbody>${produtosRows}</tbody>
+            </table>
+        </div>
+
+        <div class="osep-bloco">
+            <div class="osep-bloco-titulo">TRANSPORTE</div>
+            <div>${transpLinha}</div>
+            ${previsao ? `<div>Previsão: ${previsao}</div>` : ''}
+            ${t.observacoes ? `<div>Obs: ${t.observacoes}</div>` : ''}
+        </div>
+
+        <div class="osep-assinaturas">
+            <div class="osep-assinatura-linha">Separado por: <span class="osep-linha-longa"></span></div>
+            <div class="osep-assinatura-linha">Assinatura: <span class="osep-linha-longa"></span></div>
+            <div class="osep-assinatura-linha">Data/Hora: <span class="osep-linha-curta"></span></div>
+            <br>
+            <div class="osep-assinatura-linha">Conferido por: <span class="osep-linha-longa"></span></div>
+            <div class="osep-assinatura-linha">Assinatura: <span class="osep-linha-longa"></span></div>
+        </div>
+    `;
+
+    const container = document.getElementById('ordemSeparacaoContent');
+    if (container) {
+        container.innerHTML = html;
+    }
+    return container;
+}
+
 // ============================================================
 // WHATSAPP NF-e
 // ============================================================
