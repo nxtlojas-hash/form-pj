@@ -821,7 +821,10 @@ function abrirWizardPosVenda(venda, webhookSucesso, blingSucesso, blingPedidoId,
     // --- Passo 2: preencher conteúdo WhatsApp ---
     _preencherPane2WhatsApp(venda, blingSucesso, blingPedidoId, nfeId, nfeEnviada);
 
-    // --- Passo 3: checklist final ---
+    // --- Passo 3: preencher Ordem de Separação (texto + HTML oculto) ---
+    _preencherPane3Separacao(venda, blingPedidoId);
+
+    // --- Passo 4: checklist final ---
     const checklistFinal = document.getElementById('wizardChecklistFinal');
     if (checklistFinal) {
         checklistFinal.innerHTML = _wizardChecklistFinalHTML(webhookSucesso, blingSucesso, blingPedidoId, nfeId, nfeEnviada);
@@ -1094,6 +1097,15 @@ function gerarTextoResumoVendaPJ(venda, blingSucesso, blingPedidoId, nfeId, nfeE
 // ============================================================
 // ORDEM DE SEPARACAO PJ - GERADOR DE TEXTO (sem valores)
 // ============================================================
+
+function _preencherPane3Separacao(venda, blingPedidoId) {
+    const textarea = document.getElementById('ordemSeparacaoTexto');
+    if (textarea) {
+        textarea.value = gerarTextoSeparacaoPJ(venda, blingPedidoId);
+    }
+    // Pre-renderiza o HTML no container oculto (usado por PDF e impressao)
+    gerarHTMLOrdemSeparacao(venda, blingPedidoId);
+}
 
 function gerarTextoSeparacaoPJ(venda, blingPedidoId) {
     const dataFormatada = new Date(venda.dataVenda + 'T12:00:00').toLocaleDateString('pt-BR');
