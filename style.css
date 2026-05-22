@@ -1998,6 +1998,19 @@ body {
 
 .fatura-empresa-emitente {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.fatura-logo {
+    height: 48px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.fatura-empresa-dados {
+    display: flex;
     flex-direction: column;
     gap: 0.15rem;
 }
@@ -2426,4 +2439,27 @@ body {
         left: 0 !important;
         display: block !important;
     }
+}
+
+/* ============================================================
+   LOGO NXT - reuso em wizard, ordem de separacao e fatura
+   ============================================================ */
+.wizard-logo {
+    height: 28px;
+    width: auto;
+    flex-shrink: 0;
+    display: block;
+}
+
+.ordem-separacao-document .osep-header-brand {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6mm;
+}
+
+.ordem-separacao-document .osep-logo {
+    height: 18mm;
+    width: auto;
+    flex-shrink: 0;
 }

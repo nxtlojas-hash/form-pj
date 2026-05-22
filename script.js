@@ -1202,7 +1202,10 @@ function gerarHTMLOrdemSeparacao(venda, blingPedidoId) {
 
     const html = `
         <div class="osep-header">
-            <h1>ORDEM DE SEPARAÇÃO</h1>
+            <div class="osep-header-brand">
+                <img src="logo nxt.png" alt="NXT Autopropelidos" class="osep-logo">
+                <h1>ORDEM DE SEPARAÇÃO</h1>
+            </div>
             <div class="osep-header-meta">
                 <div><strong>NXT Autopropelidos</strong></div>
                 <div>Pedido: <strong>${pedidoStr}</strong></div>
@@ -1554,9 +1557,12 @@ function gerarFaturaPJ() {
     const html = `
         <div class="fatura-cabecalho">
             <div class="fatura-empresa-emitente">
-                <strong>NXT AUTOPROPELIDOS</strong>
-                <span>CNPJ: 55.099.827/0001-96</span>
-                <span>www.nxt.eco.br</span>
+                <img src="logo nxt.png" alt="NXT Autopropelidos" class="fatura-logo">
+                <div class="fatura-empresa-dados">
+                    <strong>NXT AUTOPROPELIDOS</strong>
+                    <span>CNPJ: 55.099.827/0001-96</span>
+                    <span>www.nxt.eco.br</span>
+                </div>
             </div>
             <div class="fatura-meta">
                 <div class="fatura-meta-label">FATURA DE VENDA PJ</div>
