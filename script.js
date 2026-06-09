@@ -28,8 +28,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     aplicarMascaras();
     configurarFormulario();
     configurarPagamentoCards();
+    protegerSelects();
     atualizarProgressoVenda();
 });
+
+// Selects nativos no desktop têm dois comportamentos que causavam erro de
+// preenchimento (modelo "piscando" e cor trocada ao rolar a página):
+// 1. setas/PageDown com o select ainda focado mudam o valor silenciosamente;
+// 2. a roda do mouse sobre o select rola a página e fecha o dropdown na hora.
+function protegerSelects() {
+    document.querySelectorAll('select').forEach(sel => {
+        sel.addEventListener('change', () => sel.blur());
+        sel.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+    });
+}
 
 async function carregarDadosIniciais() {
     try {
