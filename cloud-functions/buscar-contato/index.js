@@ -2,7 +2,11 @@ const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 const secretClient = new SecretManagerServiceClient();
 
 const PROJECT_ID = 'plataforma-nxt-99c15';
-const BLING_API_BASE = 'https://www.bling.com.br/Api/v3';
+const BLING_API_BASE = 'https://api.bling.com.br/Api/v3';
+
+// Mapa fiscal NXT embutido (fonte única da verdade — ignora dadosFiscais do request).
+// Split bruto 20/40/40 com IPI descontado por item (ver _info no JSON).
+const FISCAL_NXT = require('./produtos-fiscal-nxt.json');
 
 // Cache em memória (persiste entre invocações da mesma instância)
 let cachedAccessToken = null;
@@ -252,46 +256,67 @@ async function criarPedidoVenda(venda) {
     const cfopSugerido = isInterestadual ? '6102' : '5102';
     console.log(`Estado cliente: ${estadoCliente}, Interestadual: ${isInterestadual}, CFOP: ${cfopSugerido}`);
 
-    // 3. Montar itens do pedido — desdobramento fiscal igual ao app
+    // 3. Montar itens do pedido — formato fiscal NXT (3 linhas por moto, IPI descontado)
+    // Padrao da emissora (validado na NF-e 004457): cadastro POR MODELO (ex. HY001/HY002/HY003),
+    // split bruto 20% principal / 40% motor / 40% bateria, valor liquido = bruto / (1 + IPI),
+    // bateria em unidades individuais (qtd_motos x 4/5/6).
     const itensPedido = [];
-    const fiscal = venda.dadosFiscais || {};
+
+    // Cache de lookup por codigo (evita repetir GET /produtos por codigo na mesma venda)
+    const cacheProduto = {};
+    const buscarProdutoPorCodigo = async (codigo) => {
+        if (cacheProduto[codigo] !== undefined) return cacheProduto[codigo];
+        try {
+            const busca = await blingRequest(`/produtos?codigo=${encodeURIComponent(codigo)}`);
+            cacheProduto[codigo] = (busca.data && busca.data.length > 0) ? busca.data[0] : null;
+        } catch (e) {
+            cacheProduto[codigo] = null;
+        }
+        return cacheProduto[codigo];
+    };
 
     for (let i = 0; i < venda.produtos.length; i++) {
         const produto = venda.produtos[i];
         const precoUnit = produto.precoUnitario || produto.preco || 0;
-        const dadoFiscal = fiscal[produto.modelo];
+        const qtdMotos = produto.quantidade || 1;
+        const dadoFiscal = FISCAL_NXT[produto.modelo];
 
         if (dadoFiscal && dadoFiscal.itens && dadoFiscal.itens.length > 0) {
-            // Desdobramento fiscal: 1 moto vira multiplos itens na NF-e
-            console.log(`Desdobramento fiscal para ${produto.modelo}: ${dadoFiscal.itens.length} itens`);
+            console.log(`Fiscal NXT ${produto.modelo}: ${dadoFiscal.itens.length} linhas, ${qtdMotos} un a R$${precoUnit}`);
 
             for (const itemFiscal of dadoFiscal.itens) {
-                const descricao = itemFiscal.tipo === 'quadro'
-                    ? `${itemFiscal.descricao} ${produto.cor}`
-                    : itemFiscal.descricao;
-
-                const valorComponente = Math.round(precoUnit * itemFiscal.percentual * 100) / 100;
+                const ipi = itemFiscal.ipi || 0;
+                // Valor por UNIDADE fiscal (bateria ja e por unidade no mapa), liquido de IPI
+                const valorLiquido = Math.round((precoUnit * itemFiscal.percentual / (1 + ipi)) * 100) / 100;
 
                 const item = {
-                    descricao: descricao,
+                    codigo: itemFiscal.codigo,
+                    descricao: itemFiscal.descricao,
                     unidade: itemFiscal.unidade || 'UN',
-                    quantidade: produto.quantidade || 1,
-                    valor: valorComponente
+                    quantidade: qtdMotos * (itemFiscal.quantidade || 1),
+                    valor: valorLiquido
                 };
 
-                // Tentar vincular ao produto cadastrado no Bling (sem codigo para evitar conflito)
-                try {
-                    const busca = await blingRequest(`/produtos?nome=${encodeURIComponent(descricao)}`);
-                    if (busca.data && busca.data.length > 0) {
-                        item.produto = { id: busca.data[0].id };
-                        console.log(`Vinculado ao Bling: ${descricao} -> ID ${busca.data[0].id}`);
-                    }
-                } catch (e) {
-                    // Produto nao encontrado — envia sem vinculo
+                // Vincular ao cadastro do Bling pelo CODIGO (nao por nome)
+                const prodBling = await buscarProdutoPorCodigo(itemFiscal.codigo);
+                if (prodBling) {
+                    item.produto = { id: prodBling.id };
+                    item.descricao = prodBling.nome; // descricao oficial do cadastro
+                    console.log(`Vinculado: ${itemFiscal.codigo} -> ID ${prodBling.id}`);
+                } else {
+                    console.log(`Cadastro ausente no Bling: ${itemFiscal.codigo} (${produto.modelo} ${itemFiscal.tipo}) — item vai por descricao`);
                 }
 
                 itensPedido.push(item);
             }
+        } else if (produto.modelo === 'Capacete') {
+            // Capacete vendido como produto proprio (sem desdobramento)
+            itensPedido.push({
+                descricao: 'CAPACETE DE PLASTICO PVC',
+                unidade: 'UN',
+                quantidade: qtdMotos,
+                valor: precoUnit
+            });
         } else {
             // Sem desdobramento fiscal: enviar como item unico
             const descricao = `NXT Autopropelido ${produto.modelo} ${produto.cor}`;
@@ -422,58 +447,15 @@ ${venda.pagamento?.observacoes ? 'Obs: ' + venda.pagamento.observacoes : ''}`.tr
         observacoes: observacoes
     };
 
-    // 9. Criar pedido
+    // 9. Criar pedido — NF-e NAO e gerada automaticamente (decisao 2026-07-12):
+    // a emissora confere o pedido (3 linhas por moto, valores liquidos de IPI) e emite a NF-e ela mesma.
     const resultado = await blingRequest('/pedidos/vendas', 'POST', pedido);
     const pedidoId = resultado.data.id;
-
-    // 10. Gerar NF-e a partir do pedido
-    let nfeId = null;
-    let nfeEnviada = false;
-    try {
-        console.log(`[NF-e] Gerando NF-e para pedido ${pedidoId}...`);
-
-        // Tentar gerar NF-e via endpoint de pedido de venda
-        let nfeResult;
-        try {
-            nfeResult = await blingRequest(`/pedidos/vendas/${pedidoId}/gerar-nfe`, 'POST');
-            console.log(`[NF-e] Resultado gerar-nfe:`, JSON.stringify(nfeResult));
-        } catch (e1) {
-            console.error(`[NF-e] Erro endpoint gerar-nfe: ${e1.message}`);
-            // Fallback: criar NF-e diretamente referenciando o pedido
-            try {
-                nfeResult = await blingRequest(`/nfe`, 'POST', {
-                    tipo: 1,
-                    pedidoVenda: { id: pedidoId }
-                });
-                console.log(`[NF-e] Resultado POST /nfe:`, JSON.stringify(nfeResult));
-            } catch (e2) {
-                console.error(`[NF-e] Erro endpoint POST /nfe: ${e2.message}`);
-                throw e2;
-            }
-        }
-        nfeId = nfeResult.data?.idNotaFiscal || nfeResult.data?.id || null;
-        console.log(`[NF-e] nfeId: ${nfeId}`);
-
-        // 11. Enviar NF-e para SEFAZ
-        if (nfeId) {
-            try {
-                await blingRequest(`/nfe/${nfeId}/enviar`, 'POST');
-                nfeEnviada = true;
-                console.log(`[NF-e] Enviada para SEFAZ com sucesso`);
-            } catch (envioErr) {
-                console.error(`[NF-e] Criada mas nao enviada para SEFAZ: ${envioErr.message}`);
-            }
-        }
-    } catch (nfeErr) {
-        console.error(`[NF-e] Erro ao gerar NF-e: ${nfeErr.message}`);
-    }
 
     return {
         sucesso: true,
         pedidoId,
-        numero: resultado.data.numero,
-        nfeId,
-        nfeEnviada
+        numero: resultado.data.numero
     };
 }
 
