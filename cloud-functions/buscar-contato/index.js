@@ -154,17 +154,16 @@ async function blingRequest(endpoint, method = 'GET', body = null) {
 
 async function buscarContatoPorCNPJ(cnpj) {
     const cnpjLimpo = cnpj.replace(/\D/g, '');
-    const result = await blingRequest(`/contatos?numeroDocumento=${cnpjLimpo}&limite=1`);
-    const contatos = result.data || [];
+    const contato = await localizarContatoPorCNPJ(cnpjLimpo);
 
-    if (contatos.length === 0) return null;
+    if (!contato) return null;
 
-    const contatoId = contatos[0].id;
+    const contatoId = contato.id;
     try {
         const detail = await blingRequest(`/contatos/${contatoId}`);
         return mapearContatoCompleto(detail.data);
     } catch (e) {
-        return mapearContatoBasico(contatos[0]);
+        return mapearContatoBasico(contato);
     }
 }
 
@@ -204,15 +203,36 @@ function mapearContatoCompleto(contato) {
 // BUSCAR OU CRIAR CONTATO
 // ============================================================
 
+// Busca ampla de contato por CNPJ: numeroDocumento (digitos) e fallback via pesquisa
+// (digitos e formatado) — contatos gravados com pontuacao escapam do filtro numeroDocumento.
+async function localizarContatoPorCNPJ(cnpjLimpo) {
+    if (!cnpjLimpo) return null;
+
+    const porDocumento = await blingRequest(`/contatos?numeroDocumento=${cnpjLimpo}&limite=1`);
+    if (porDocumento.data && porDocumento.data.length > 0) return porDocumento.data[0];
+
+    const cnpjFormatado = cnpjLimpo.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+    for (const termo of [cnpjLimpo, cnpjFormatado]) {
+        try {
+            const res = await blingRequest(`/contatos?pesquisa=${encodeURIComponent(termo)}&limite=5`);
+            const hit = (res.data || []).find(c =>
+                String(c.numeroDocumento || '').replace(/\D/g, '') === cnpjLimpo);
+            if (hit) return hit;
+        } catch (e) {
+            console.log(`Busca pesquisa=${termo} falhou: ${e.message}`);
+        }
+    }
+    return null;
+}
+
 async function buscarOuCriarContato(empresa) {
     const cnpjLimpo = (empresa.cnpj || '').replace(/\D/g, '');
 
-    // Buscar por CNPJ
-    if (cnpjLimpo) {
-        const result = await blingRequest(`/contatos?numeroDocumento=${cnpjLimpo}&limite=1`);
-        if (result.data && result.data.length > 0) {
-            return result.data[0].id;
-        }
+    // Buscar por CNPJ (busca ampla)
+    const existente = await localizarContatoPorCNPJ(cnpjLimpo);
+    if (existente) {
+        console.log(`Contato encontrado: ${existente.nome} (id ${existente.id})`);
+        return existente.id;
     }
 
     // Criar novo contato PJ
@@ -238,8 +258,25 @@ async function buscarOuCriarContato(empresa) {
         }
     };
 
-    const resultado = await blingRequest('/contatos', 'POST', novoContato);
-    return resultado.data.id;
+    try {
+        const resultado = await blingRequest('/contatos', 'POST', novoContato);
+        return resultado.data.id;
+    } catch (e) {
+        // "CNPJ ja esta cadastrado no contato X" — o contato existe mas escapou da busca.
+        // Tentar localizar de novo (busca ampla); se nem assim aparecer, esta na LIXEIRA do
+        // Bling (bloqueia duplicata mas e invisivel a API) — erro claro para o operador.
+        if (/j\S* est\S* cadastrado/i.test(e.message)) {
+            console.log('CNPJ duplicado ao criar — relocalizando contato...');
+            const achado = await localizarContatoPorCNPJ(cnpjLimpo);
+            if (achado) {
+                console.log(`Contato recuperado pos-duplicata: ${achado.nome} (id ${achado.id})`);
+                return achado.id;
+            }
+            throw new Error(`CNPJ ${cnpjLimpo} pertence a um contato que nao aparece na busca ` +
+                `(provavelmente na LIXEIRA do Bling). Restaure o contato no Bling ou use outro CNPJ.`);
+        }
+        throw e;
+    }
 }
 
 // ============================================================
@@ -359,7 +396,12 @@ async function criarPedidoVenda(venda) {
     const primeiraForma = (venda.pagamento?.formas || [])[0] || 'outros';
     const formaPagamentoId = mapeamentoPagamento[primeiraForma] || 99;
 
-    // 6. Montar parcelas
+    // 6. Montar parcelas — o Bling exige soma das parcelas = soma dos ITENS do pedido
+    // (que sao liquidos de IPI). O total cobrado (com IPI) vai nas observacoes; o IPI e
+    // acrescentado pelo Bling na emissao da NF-e, fechando no preco de venda.
+    const totalPedido = Math.round(itensPedido.reduce(
+        (s, it) => s + Math.round(it.quantidade * it.valor * 100) / 100 * 1, 0) * 100) / 100;
+
     const parcelas = [];
     const condicaoPrazo = venda.pagamento?.condicaoPrazo || '';
 
@@ -369,21 +411,26 @@ async function criarPedidoVenda(venda) {
             : condicaoPrazo === '30/60/90 dias' ? [30, 60, 90]
             : [30];
 
-        const valorParcela = venda.total / diasParcelas.length;
         const dataBase = new Date(venda.dataVenda + 'T12:00:00');
+        let acumulado = 0;
 
-        diasParcelas.forEach(dias => {
+        diasParcelas.forEach((dias, idx) => {
             const dataVenc = new Date(dataBase);
             dataVenc.setDate(dataVenc.getDate() + dias);
+            // Ultima parcela absorve o arredondamento para fechar exato
+            const valor = (idx === diasParcelas.length - 1)
+                ? Math.round((totalPedido - acumulado) * 100) / 100
+                : Math.round(totalPedido / diasParcelas.length * 100) / 100;
+            acumulado = Math.round((acumulado + valor) * 100) / 100;
             parcelas.push({
                 dataVencimento: dataVenc.toISOString().split('T')[0],
-                valor: Math.round(valorParcela * 100) / 100
+                valor: valor
             });
         });
     } else {
         parcelas.push({
             dataVencimento: venda.dataVenda,
-            valor: venda.total
+            valor: totalPedido
         });
     }
 
@@ -429,6 +476,7 @@ Empresa: ${venda.empresa.razaoSocial}
 CNPJ: ${venda.empresa.cnpj}
 Responsavel Compra: ${venda.empresa.responsavel || ''}
 Vendedor: ${venda.responsavelVenda}
+Total da venda (com IPI): R$ ${Number(venda.total || 0).toFixed(2).replace('.', ',')} — itens do pedido sao liquidos de IPI; a NF-e fecha neste total.
 ${venda.empresa.email ? 'E-mail: ' + venda.empresa.email : ''}
 ${venda.numeroPedidoOC ? 'OC: ' + venda.numeroPedidoOC : ''}
 ${venda.pagamento?.observacoes ? 'Obs: ' + venda.pagamento.observacoes : ''}`.trim();
