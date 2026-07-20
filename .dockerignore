@@ -1,8 +1,23 @@
 node_modules
 api
 package.json
+package-lock.json
 vercel.json
 service-worker.js
 Dockerfile
 .dockerignore
 blueprint-*.json
+
+# O Dockerfile faz "COPY . /usr/share/nginx/html/" e o nginx serve a raiz
+# publicamente — tudo que nao estiver listado aqui vira URL acessivel na
+# internet. Conferido em 20/07/2026: .claude/, .omc/ e cloud-functions/
+# estavam publicos na revisao form-pj-00020-rj8.
+.git
+.gitignore
+.claude
+.omc
+.playwright-mcp
+cloud-functions
+docs
+Mapeamento fiscal
+*.md
