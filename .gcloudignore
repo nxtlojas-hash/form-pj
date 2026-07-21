@@ -1,0 +1,17 @@
+# Controla o que sobe para o Cloud Build no `gcloud run deploy --source`.
+# O que nao subir aqui NUNCA entra na imagem — camada mais robusta que o
+# .dockerignore. Mantido em sincronia com o .dockerignore.
+# Motivo: em 21/07 apps-script/*.gs e docs/*.md ficaram publicos (a URL do
+# orcamento estava no plano). Fonte interna e docs NAO vao para producao.
+.git
+.gitignore
+.claude
+.omc
+.playwright-mcp
+node_modules
+cloud-functions
+apps-script
+docs
+Mapeamento fiscal
+**/*.md
+**/*.gs

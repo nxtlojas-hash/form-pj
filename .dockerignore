@@ -18,6 +18,9 @@ blueprint-*.json
 .omc
 .playwright-mcp
 cloud-functions
+apps-script
 docs
 Mapeamento fiscal
 *.md
+**/*.md
+**/*.gs
