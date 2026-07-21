@@ -13,6 +13,24 @@ var PASTA_PDF_NOME = 'PDFs';
 var VERSAO = 'orc-pj-1';
 var TZ = 'America/Sao_Paulo';
 
+// Roda UMA vez a partir do editor: renomeia a planilha, nomeia a aba e
+// escreve o cabeçalho de 14 colunas. Idempotente (pode rodar de novo sem estragar).
+function setup() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.rename('Orçamentos PJ');
+  var sheet = ss.getSheets()[0];
+  if (sheet.getName() !== ABA) sheet.setName(ABA);
+  var header = ['Numero','Data','Validade','Status','DataConversao','CNPJ',
+                'RazaoSocial','Contato','Vendedor','Itens','Total','Condicoes',
+                'PdfUrl','NumeroPedido'];
+  if (String(sheet.getRange(1, 1).getValue()) !== 'Numero') {
+    sheet.getRange(1, 1, 1, header.length).setValues([header]);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, header.length).setFontWeight('bold');
+  }
+  return 'setup ok — planilha "Orçamentos PJ", aba "' + ABA + '", cabeçalho pronto';
+}
+
 // ---------------------------------------------------------------- roteadores
 
 function doGet(e) {
