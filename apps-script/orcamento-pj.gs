@@ -63,6 +63,13 @@ function getSheet() {
   return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA);
 }
 
+// O Sheets auto-converte "31/07/2026" em objeto Date. Na leitura, devolve
+// sempre como texto dd/MM/yyyy para o form não receber um timestamp cru.
+function fmtData(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, TZ, 'dd/MM/yyyy');
+  return String(v || '');
+}
+
 function jsonResponse(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
@@ -103,8 +110,8 @@ function salvarOrcamento(d) {
 // ---------------------------------------------------------------- listar / buscar
 
 function _linhaParaResumo(r) {
-  return { numero:String(r[0]), data:String(r[1]||''), status:String(r[3]||'pendente'),
-           razaoSocial:String(r[6]||''), total:parseFloat(r[10])||0, validade:String(r[2]||'') };
+  return { numero:String(r[0]), data:fmtData(r[1]), status:String(r[3]||'pendente'),
+           razaoSocial:String(r[6]||''), total:parseFloat(r[10])||0, validade:fmtData(r[2]) };
 }
 
 function listarOrcamentos(busca, status) {
@@ -136,7 +143,7 @@ function buscarOrcamento(numero) {
     try { itens = JSON.parse(r[9] || '[]'); } catch (e) {}
     try { cond = JSON.parse(r[11] || '{}'); } catch (e) {}
     return { sucesso:true, orcamento:{
-      numero:String(r[0]), data:String(r[1]||''), validade:String(r[2]||''),
+      numero:String(r[0]), data:fmtData(r[1]), validade:fmtData(r[2]),
       status:String(r[3]||'pendente'),
       empresa:{ cnpj:String(r[5]||''), razaoSocial:String(r[6]||''),
                 responsavel:contato[0]||'', telefone:contato[1]||'', email:contato[2]||'' },
