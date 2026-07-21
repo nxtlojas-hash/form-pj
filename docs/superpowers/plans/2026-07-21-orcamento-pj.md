@@ -8,6 +8,14 @@
 
 **Tech Stack:** HTML/CSS/JS vanilla (form-pj), Google Apps Script + Google Sheets + Drive (backend), deploy Cloud Run (form-pj) e Web App (Apps Script).
 
+## ESTADO — Tasks 1-4 CONCLUÍDAS e verificadas ao vivo (21/07)
+
+- **ORCAMENTO_URL** = `https://script.google.com/macros/s/AKfycbw5sTuN3YZjxJolYJLik25QvaX5paDJ67vsmnuVhWSBMIs2KwfJU5nNgM4rLLVO73Qy/exec`
+- Planilha `Orçamentos PJ` em `J:\Meu Drive\PJ` (conta nxt.lojas), aba `Orçamentos`, 14 colunas, subpasta `PDFs`.
+- Verificado por fetch da origem real do form-pj: ping ✓, salvar ✓ (ORC-2026-001..003), listar ✓, buscar ✓, datas dd/MM/yyyy ✓.
+- ⚠️ **ACHADO CRÍTICO (frontend):** o fetch DEVE usar `Content-Type: text/plain;charset=utf-8` — `application/json` dispara preflight CORS que o Apps Script NÃO responde (quebra silenciosa). O servidor faz `JSON.parse` do corpo de qualquer forma.
+- Pendente: apagar as 3 linhas de teste (Teste LTDA) da planilha antes do encerramento.
+
 ## Global Constraints
 
 - **Conta Google:** `nxt.lojas@gmail.com` — pasta PJ, planilha, Apps Script e PDFs todos sob ela.
@@ -438,7 +446,7 @@ async function salvarComoOrcamento() {
   if (produtosDaVenda.length === 0) { mostrarFeedback('Adicione ao menos um produto', 'erro'); return; }
   try {
     const res = await fetch(ORCAMENTO_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify(montarOrcamentoPayload())
     });
     const data = await res.json();
@@ -605,7 +613,7 @@ if (window.orcamentoCarregado && typeof marcarOrcamentoConvertido === 'function'
 async function marcarOrcamentoConvertido(numero, numeroPedido) {
   try {
     await fetch(ORCAMENTO_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify({ action:'converter', numero:numero, numeroPedido:numeroPedido })
     });
   } catch (e) { console.warn('Falha ao marcar orcamento convertido', e); }
