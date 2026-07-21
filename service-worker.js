@@ -1,9 +1,10 @@
-const CACHE_NAME = 'nxt-lojas-cache-v21';
+const CACHE_NAME = 'nxt-lojas-cache-v22';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/script.js',
+  '/orcamento.js',
   '/logo nxt.png',
   '/dados/lojas.json',
   '/dados/produtos.json'

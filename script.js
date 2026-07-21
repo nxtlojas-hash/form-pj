@@ -750,6 +750,12 @@ async function registrarVenda(event) {
         vendasSalvas.push(venda);
         localStorage.setItem('vendas_pj', JSON.stringify(vendasSalvas));
 
+        // Se esta venda veio de um orçamento, marca como convertido (não bloqueia a venda)
+        if (window.orcamentoCarregado && typeof marcarOrcamentoConvertido === 'function') {
+            marcarOrcamentoConvertido(window.orcamentoCarregado, blingPedidoId || '');
+            window.orcamentoCarregado = null;
+        }
+
         vendaJaEnviada = true;
         btnRegistrar.textContent = 'Venda Enviada';
 

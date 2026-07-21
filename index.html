@@ -74,6 +74,17 @@
 
             <form id="vendaForm" novalidate>
 
+                <!-- ORÇAMENTOS: abrir um pendente para converter em venda -->
+                <div style="margin-bottom:16px;display:flex;flex-direction:column;gap:8px">
+                    <button type="button" class="btn-limpar" onclick="abrirMeusOrcamentos()" style="align-self:flex-start">
+                        📋 Meus orçamentos
+                    </button>
+                    <div id="painelOrcamentos" style="display:none;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:12px">
+                        <input type="text" id="buscaOrcamento" placeholder="Buscar por empresa ou número" oninput="abrirMeusOrcamentos()" style="width:100%;box-sizing:border-box;margin-bottom:8px">
+                        <ul id="listaOrcamentos" style="list-style:none;margin:0;padding:0;max-height:240px;overflow:auto"></ul>
+                    </div>
+                </div>
+
                 <!-- SEÇÃO 1: Informações da Venda -->
                 <div class="secao-card" data-secao="1">
                     <div class="secao-header" onclick="toggleSecao(this)">
@@ -584,6 +595,14 @@
                         <span class="footer-total-label">Total da Venda</span>
                         <span class="footer-total-valor" id="totalVenda">R$ 0,00</span>
                     </div>
+                    <div class="footer-orcamento" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+                        <label style="font-size:.85rem;opacity:.85">Validade da proposta
+                            <input type="date" id="validadeOrcamento" style="margin-left:6px">
+                        </label>
+                        <button type="button" class="btn-limpar" onclick="salvarComoOrcamento()">
+                            Salvar como orçamento
+                        </button>
+                    </div>
                     <div class="footer-actions">
                         <button type="button" id="limparFormularioBtn" class="btn-limpar">
                             Limpar
@@ -816,5 +835,6 @@
     <div id="ordemSeparacaoContent" class="ordem-separacao-document" aria-hidden="true" style="position: fixed; left: -10000px; top: 0;"></div>
 
     <script src="script.js"></script>
+    <script src="orcamento.js"></script>
 </body>
 </html>
