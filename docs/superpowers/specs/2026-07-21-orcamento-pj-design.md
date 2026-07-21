@@ -1,6 +1,7 @@
 # Spec — Orçamento PJ que vira venda (form-pj)
 
-> **Data:** 21/07/2026 · **Status:** desenho aprovado, sem código escrito
+> **Data:** 21/07/2026 · **Status:** spec aprovada pela Claudia (21/07), sem código escrito
+> **Conta Google:** `nxt.lojas@gmail.com` · **Numeração:** `ORC-2026-NNN`
 > **Repo:** `C:\dev\NXT\ativos\form-pj` (branch `master`, deploy Cloud Run)
 > **Padrão de origem:** o sistema de orçamento do SAC (`sac-pecas/google-apps-script.js`),
 > que funcionou por muito tempo — espelhamos o **padrão**, não a instância.
@@ -38,9 +39,9 @@ J:\Meu Drive\PJ\
 Backend: um **Apps Script (Web App)** ligado a essa planilha — a mesma forma de chamada que o
 form-pj já faz para o Bling (um `fetch` POST). Sem base nova, sem SDK, sem Firestore.
 
-> ⚠️ **Item de setup a confirmar no plano:** sob qual conta Google roda o Apps Script e mora a
-> pasta PJ. O SAC usa uma conta própria; o form-pj/Bling usa `plataforma-nxt`. Definir antes de
-> implantar (afeta permissão e onde a planilha aparece).
+**Conta Google (decisão da Claudia, 21/07):** `nxt.lojas@gmail.com` — a mesma que já é dona
+das planilhas de treinamentos e outros recursos NXT. A pasta `PJ`, a planilha, o Apps Script e
+os PDFs vivem todos sob essa conta.
 
 ## 4. Estrutura da planilha (espelha o SAC, adaptada a motos B2B)
 
